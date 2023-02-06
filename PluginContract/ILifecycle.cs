@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PluginContract {
-    public interface IPlugin: ILifecycle {
-        string Name { get; }
+    public interface ILifecycle {
+        void OnStart();
+        void OnStop();
     }
 }

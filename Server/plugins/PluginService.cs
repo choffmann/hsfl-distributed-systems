@@ -18,6 +18,7 @@ namespace hsfl.ceho5518.vs.server.plugins {
         }
 
         private void LoadPlugins() {
+
             var dlls = Directory.GetFiles(path, "*.dll");
             foreach (var dll in dlls) {
                 var ass = Assembly.LoadFrom(dll);
@@ -32,9 +33,20 @@ namespace hsfl.ceho5518.vs.server.plugins {
             OnStart();
         }
 
+        private void CheckPath() {
+
+        }
+
+        // Total amount of loaded plugins
+        public int LoadedPlungins() {
+            return pluginsList.Count;
+        }
+
         public void ReloadPlugins() {
+            AnsiConsole.WriteLine("Reloading plugins...");
             pluginsList.Clear();
             LoadPlugins();
+            AnsiConsole.WriteLine("Reloading plugins successfully");
         }
 
         public void OnStart() {
