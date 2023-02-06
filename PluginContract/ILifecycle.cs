@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace PluginContract {
     public interface ILifecycle {
-        void OnStart();
+        void OnInit();
+        void OnStartup();
         void OnStop();
     }
 }

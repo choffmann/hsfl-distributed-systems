@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hsfl.ceho5518.vs.server.LoggerService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -32,17 +33,17 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
                 proxyServiceHost.Open();
 
-                Console.WriteLine("Proxy Service started.");
+                Logger.Info("Proxy Service started.");
             } catch (CommunicationException e) {
-                Console.WriteLine(e.Message);
+                Logger.Exception(e);
             } catch (TimeoutException e) {
-                Console.WriteLine(e.Message);
+                Logger.Exception(e);
             }
         }
 
         public void Stop() {
             if (proxyServiceHost.State != CommunicationState.Closed) {
-                Console.WriteLine("Aborting the Proxy service...");
+                Logger.Info("Aborting the Proxy service...");
                 proxyServiceHost.Abort();
             }
         }

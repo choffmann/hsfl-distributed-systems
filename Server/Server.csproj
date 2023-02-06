@@ -90,6 +90,7 @@
     <Compile Include="DiscoveryProxy\DiscoveryProxyService.cs" />
     <Compile Include="DiscoveryProxy\ICalculatorService.cs" />
     <Compile Include="DiscoveryProxy\InvokeDiscoveryProxy.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

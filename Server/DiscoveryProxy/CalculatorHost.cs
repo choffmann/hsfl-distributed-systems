@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hsfl.ceho5518.vs.server.LoggerService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -45,17 +46,17 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
                 serviceHost.Open();
 
-                Console.WriteLine("Calculator Service started at {0}", baseAddress);
+                Logger.Info($"Calculator Service started at {baseAddress}");
             } catch (CommunicationException e) {
-                Console.WriteLine(e.Message);
+                Logger.Exception(e);
             } catch (TimeoutException e) {
-                Console.WriteLine(e.Message);
+                Logger.Exception(e);
             }
         }
 
         public void Stop() {
             if (serviceHost.State != CommunicationState.Closed) {
-                Console.WriteLine("Aborting the Calculator service...");
+                Logger.Info("Aborting the Calculator service...");
                 serviceHost.Abort();
             }
         }

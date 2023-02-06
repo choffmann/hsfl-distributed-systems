@@ -7,6 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Discovery;
 using Spectre.Console;
 using System.Xml;
+using hsfl.ceho5518.vs.server.LoggerService;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
@@ -58,12 +59,12 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void PrintDiscoveryMetadata(EndpointDiscoveryMetadata endpointDiscoveryMetadata, string verb) {
-            AnsiConsole.MarkupLine($"[bold]{verb}[/] service of the following type from cache.");
+            Logger.Info($"[bold]{verb}[/] service of the following type from cache.");
             foreach (XmlQualifiedName contractName in endpointDiscoveryMetadata.ContractTypeNames) {
-                AnsiConsole.MarkupLine($"  {contractName}");
+                Logger.Info($"{contractName}");
                 break;
             }
-            AnsiConsole.MarkupLine("  Operation Completed");
+            Logger.Success("Operation Completed");
 
         }
 
