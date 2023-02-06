@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hsfl.ceho5518.vs.server.plugins {
+namespace hsfl.ceho5518.vs.server.Plugins {
     public class PluginService {
         private List<PluginContract.IPlugin> pluginsList = new List<PluginContract.IPlugin>();
         private string path;
@@ -31,10 +31,6 @@ namespace hsfl.ceho5518.vs.server.plugins {
 
             // Run the Startup Lifecycle
             OnStart();
-        }
-
-        private void CheckPath() {
-
         }
 
         // Total amount of loaded plugins
