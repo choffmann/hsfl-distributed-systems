@@ -19,7 +19,6 @@ namespace DemoPlugin
             Console.WriteLine("DemoPlugin::OnStop()");
         }
 
-
         public void FooBar() {
             Console.WriteLine("  Die Methode FooBar, welche nicht vom Server bekannt ist.");
         }

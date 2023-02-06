@@ -10,9 +10,7 @@ namespace hsfl.ceho5518.vs.server {
     internal class Program {
         static void Main(string[] args) {
             AnsiConsole.MarkupLine("Starting Server...");
-            string pluginPath = AnsiConsole.Ask<string>("Pfad zum Plugin");
-            // PluginService pluginService = new PluginService("C:\\Users\\hoffmann\\Documents\\FH Flensburg\\7. Semester\\Verteilte Systeme\\VS-Hausarbeit\\DemoPlugin\\bin\\Debug");
-            PluginService pluginService = new PluginService(pluginPath);
+            PluginService pluginService = new PluginService("C:\\Users\\hoffmann\\Documents\\FH Flensburg\\7. Semester\\Verteilte Systeme\\VS-Hausarbeit\\DemoPlugin\\bin\\Debug");
 
             Console.WriteLine("Press to reload plugins");
             Console.ReadLine();
