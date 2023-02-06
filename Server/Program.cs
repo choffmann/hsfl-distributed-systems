@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server {
+namespace hsfl.ceho5518.vs.Server {
     internal class Program {
         static void Main(string[] args) {
         }
