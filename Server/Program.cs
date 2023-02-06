@@ -60,7 +60,7 @@ namespace hsfl.ceho5518.vs.server {
             LoadPlugins();
 
             // Initialization done
-            Logger.SuccessEmoji("Initialization system successfully");
+            Logger.SuccessEmoji("Initialization of System successfully");
 
             Console.WriteLine("");
             Console.WriteLine("Press <Enter> to exit");
