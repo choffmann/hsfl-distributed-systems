@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{99766F3D-7208-4D36-9CCE-0341DFA0BDDD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>hsfl.ceho5518.vs.Server</RootNamespace>
-    <AssemblyName>hsfl.ceho5518.vs.Server</AssemblyName>
+    <RootNamespace>hsfl.ceho5518.vs.server</RootNamespace>
+    <AssemblyName>hsfl.ceho5518.vs.server</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="state\GlobalState.cs" />
+    <Compile Include="state\ServerState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
