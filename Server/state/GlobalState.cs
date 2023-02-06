@@ -1,11 +1,11 @@
-﻿using hsfl.ceho5518.vs.server.state;
+﻿using hsfl.ceho5518.vs.server.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hsfl.ceho5518.vs.server.sate {
+namespace hsfl.ceho5518.vs.server.Sate {
     public class GlobalState {
         static GlobalState instance;
         public ServerState serverState { get; set; }
@@ -15,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.sate {
             serverState = ServerState.WORKER;
         }
 
-        public static GlobalState getInstance() {
+        public static GlobalState GetInstance() {
             if (instance == null) {
                 instance = new GlobalState();
             }

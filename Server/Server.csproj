@@ -84,7 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiscoveryProxy\AsyncResult.cs" />
+    <Compile Include="DiscoveryProxy\CalculatorHost.cs" />
+    <Compile Include="DiscoveryProxy\GeneratedCalculatorService.cs" />
+    <Compile Include="DiscoveryProxy\DiscoveryProxyHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyService.cs" />
+    <Compile Include="DiscoveryProxy\ICalculatorService.cs" />
+    <Compile Include="DiscoveryProxy\InvokeDiscoveryProxy.cs" />
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,6 +99,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PluginContract\PluginContract.csproj">
