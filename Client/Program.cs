@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client {
+namespace hsfl.ceho5518.vs.Client {
     internal class Program {
         static void Main(string[] args) {
         }

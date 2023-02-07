@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{557EE82E-7E68-470E-9B22-13DF7E6AA401}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Client</RootNamespace>
-    <AssemblyName>Client</AssemblyName>
+    <RootNamespace>hsfl.ceho5518.vs.Client</RootNamespace>
+    <AssemblyName>hsfl.ceho5518.vs.Client</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -64,7 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiscoveryMaster.cs" />
+    <Compile Include="Services\DiscoveryMaster.cs" />
     <Compile Include="GeneratedServices\GeneratedClientDiscoveryService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +77,10 @@
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{35d4fff8-14a7-4fee-b721-73ff00e9271c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
+      <Project>{4489d426-fc83-47ab-86ed-0763824a605b}</Project>
+      <Name>ServiceContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

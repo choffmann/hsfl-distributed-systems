@@ -83,16 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConcreatService\ClientDiscoveryServiceHost.cs" />
-    <Compile Include="ConcreatService\GeneratedServices\GeneratedServerDiscoveryService.cs" />
-    <Compile Include="ConcreatService\IClientDiscoveryService.cs" />
+    <Compile Include="ConcetService\ClientDiscoveryServiceHost.cs" />
+    <Compile Include="ConcetService\GeneratedServices\GeneratedServerDiscoveryService.cs" />
+    <Compile Include="ConcetService\InvokeServerDiscovery.cs" />
+    <Compile Include="ConcetService\ServerDiscoveryServiceHost.cs" />
     <Compile Include="DiscoveryProxy\AsyncResult.cs" />
-    <Compile Include="ConcreatService\ServerDiscoveryServiceHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxy.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyService.cs" />
-    <Compile Include="ConcreatService\IServerDiscoveryService.cs" />
-    <Compile Include="ConcreatService\InvokeServerDiscovery.cs" />
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +110,10 @@
     <ProjectReference Include="..\PluginContract\PluginContract.csproj">
       <Project>{5aeea4a8-508d-4f74-8ae2-625200dd862f}</Project>
       <Name>PluginContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
+      <Project>{4489d426-fc83-47ab-86ed-0763824a605b}</Project>
+      <Name>ServiceContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
