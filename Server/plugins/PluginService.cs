@@ -49,8 +49,6 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 Logger.Exception(ex);
                 Logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
             }
-
-            Logger.Info("Register Plugins...");
             if (LoadedPlungins() > 0) {
                 Logger.Success($"Successfully load [bold green]{LoadedPlungins()}[/] plugins");
             } else {

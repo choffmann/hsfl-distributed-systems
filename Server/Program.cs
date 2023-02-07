@@ -36,7 +36,7 @@ namespace hsfl.ceho5518.vs.server {
                     ctx.Status("[yellow]Try to find Master in Network[/]");
                     try {
                         // Search for services that implement ICalculatorService
-                        FindResponse findResponse = discoveryClient.Find(new FindCriteria(typeof(ICalculatorService)));
+                        FindResponse findResponse = discoveryClient.Find(new FindCriteria(typeof(IDiscoveryService)));
                         Logger.Info("Found the [bold]Master[/] in network, system become a worker");
                         ctx.Status("[yellow]Start Server as Worker[/]");
                         if (findResponse.Endpoints.Count > 0) {
@@ -69,10 +69,10 @@ namespace hsfl.ceho5518.vs.server {
 
         private static void StartMaster() {
             DiscoveryProxyHost proxyHost = new DiscoveryProxyHost();
-            CalculatorHost calculatorHost = new CalculatorHost();
+            DiscoveryServiceHost discoveryHost = new DiscoveryServiceHost();
 
             proxyHost.Start();
-            calculatorHost.Start();
+            //discoveryHost.Start();
         }
 
         private static void StartWorker(EndpointAddress endpointAddress) {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     public class InvokeDiscoveryProxy {
         public static void InvokeCalculatorService(EndpointAddress endpointAddress) {
+            /*
             // Create a client
             CalculatorServiceClient client = new CalculatorServiceClient(new NetTcpBinding(), endpointAddress);
             Logger.Info($"Invoking CalculatorService at {endpointAddress.Uri}");
@@ -34,6 +35,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
             // Closing the client gracefully closes the connection and cleans up resources
             client.Close();
+            */
         }
     }
 }
