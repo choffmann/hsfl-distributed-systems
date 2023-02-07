@@ -83,12 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcreatService\GeneratedServices\GeneratedServerDiscoveryService.cs" />
     <Compile Include="DiscoveryProxy\AsyncResult.cs" />
-    <Compile Include="DiscoveryProxy\DiscoveryServiceHost.cs" />
+    <Compile Include="ConcreatService\ServerDiscoveryServiceHost.cs" />
+    <Compile Include="DiscoveryProxy\DiscoveryProxy.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyService.cs" />
-    <Compile Include="DiscoveryProxy\IDiscoveryService.cs" />
-    <Compile Include="DiscoveryProxy\InvokeDiscoveryProxy.cs" />
+    <Compile Include="ConcreatService\IServerDiscoveryService.cs" />
+    <Compile Include="ConcreatService\InvokeServerDiscovery.cs" />
     <Compile Include="Logger\Logger.cs" />
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
@@ -119,5 +121,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

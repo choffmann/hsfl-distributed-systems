@@ -37,9 +37,8 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                     var ass = Assembly.LoadFrom(dll);
                     var plugins = ass.GetTypes().Where(w => typeof(PluginContract.IPlugin).IsAssignableFrom(w));
                     foreach (var plugin in plugins) {
-                        Logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
                         var activatorPlugin = (Activator.CreateInstance(plugin) as PluginContract.IPlugin);
-                        pluginsList.Add(activatorPlugin);
+                        OnInit(activatorPlugin);
                     }
                 }
             } catch (DirectoryNotFoundException ex) {
@@ -68,11 +67,29 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             Logger.SuccessEmoji("Reloading plugins successfully");
         }
 
+        public void OnInit(IPlugin plugin) {
+            try {
+                Logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
+                plugin.OnInit();
+                Logger.Success($"Successfully register plugin {plugin.Name}");
+                pluginsList.Add(plugin);
+            } catch(Exception ex) {
+                Logger.Exception(ex);
+                Logger.Error($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
+            }
+            
+        }
+
         public void OnStartup() {
             foreach (var plugin in pluginsList) {
-                Logger.Info($"Start Plugin {plugin.Name}");
-                plugin.OnStartup();
-                Thread.Sleep(2000);
+                try {
+                    Logger.Info($"Start Plugin {plugin.Name}");
+                    plugin.OnStartup();
+                    Logger.Success($"Successfully start plugin [bold springgreen3]{plugin.Name}[/]");
+                } catch (Exception ex) {
+                    Logger.Exception(ex);
+                    Logger.Error($"Failed to startup plugin {plugin.Name}. {ex.Message}");
+                }
             }
         }
 
