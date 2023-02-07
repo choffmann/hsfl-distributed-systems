@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ClientDiscovery")]
-    internal interface IClientDiscoveryService {
+    public interface IClientDiscoveryService {
         [OperationContract]
         void Connect(string message);
     }
