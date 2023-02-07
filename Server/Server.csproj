@@ -84,12 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiscoveryProxy\AsyncResult.cs" />
-    <Compile Include="DiscoveryProxy\CalculatorHost.cs" />
-    <Compile Include="DiscoveryProxy\GeneratedCalculatorService.cs" />
+    <Compile Include="DiscoveryProxy\DiscoveryServiceHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyHost.cs" />
     <Compile Include="DiscoveryProxy\DiscoveryProxyService.cs" />
-    <Compile Include="DiscoveryProxy\ICalculatorService.cs" />
+    <Compile Include="DiscoveryProxy\IDiscoveryService.cs" />
     <Compile Include="DiscoveryProxy\InvokeDiscoveryProxy.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
