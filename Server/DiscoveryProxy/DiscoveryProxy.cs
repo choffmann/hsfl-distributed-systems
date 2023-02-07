@@ -40,7 +40,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         private void SetupMasterDiscovery() {
-            GlobalState.GetInstance().serverState = ServerState.WORKER;
+            GlobalState.GetInstance().ServerState = ServerState.WORKER;
 
             DiscoveryProxyHost proxyHost = new DiscoveryProxyHost();
             ServerDiscoveryServiceHost discoveryHost = new ServerDiscoveryServiceHost();
@@ -52,7 +52,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         private void SetupWorkerDiscovery(EndpointAddress endpointAddress) {
-            GlobalState.GetInstance().serverState = ServerState.MASTER;
+            GlobalState.GetInstance().ServerState = ServerState.MASTER;
             InvokeServerDiscovery.InvokeDiscoveryService(endpointAddress);
 
             Logger.Success($"Initializat Worker successfully");

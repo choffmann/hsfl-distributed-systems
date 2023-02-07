@@ -1,4 +1,5 @@
 ﻿using hsfl.ceho5518.vs.server.LoggerService;
+using hsfl.ceho5518.vs.server.Sate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         private ServiceHost serviceHost;
 
         public ServerDiscoveryServiceHost() {
-            this.baseAddress = new Uri("net.tcp://localhost:9002/ServerDiscoveryService/" + Guid.NewGuid().ToString());
+            this.baseAddress = new Uri("net.tcp://localhost:9002/ServerDiscoveryService/" + GlobalState.GetInstance().ServerId);
             this.announcementEndpointAddress = new Uri("net.tcp://localhost:9021/Announcement");
             this.serviceHost = new ServiceHost(typeof(ServerDiscoveryService), baseAddress);
         }

@@ -1,4 +1,5 @@
 ﻿using hsfl.ceho5518.vs.server.LoggerService;
+using hsfl.ceho5518.vs.server.Sate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
             ServerDiscoveryServiceClient client = new ServerDiscoveryServiceClient(new NetTcpBinding(), endpointAddress);
             Logger.Info($"Invoking CalculatorService at {endpointAddress.Uri}");
 
-            client.Connect("1");
-            Logger.Info("Hello to Master from Worker 1");
+            client.Connect(GlobalState.GetInstance().ServerId.ToString());
+            Logger.Info($"Hello to Master from Worker {GlobalState.GetInstance().ServerId}");
 
             client.Close();
         }

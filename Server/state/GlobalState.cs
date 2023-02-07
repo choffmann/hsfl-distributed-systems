@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 namespace hsfl.ceho5518.vs.server.Sate {
     public class GlobalState {
         static GlobalState instance;
-        public ServerState serverState { get; set; }
+        public ServerState ServerState { get; set; }
+        public Guid ServerId { get; } = Guid.NewGuid();
         
         protected GlobalState() {
             // Set state to WORKER on default
-            serverState = ServerState.WORKER;
+            ServerState = ServerState.WORKER;
         }
 
         public static GlobalState GetInstance() {
