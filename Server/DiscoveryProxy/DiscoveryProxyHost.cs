@@ -1,4 +1,4 @@
-﻿using hsfl.ceho5518.vs.server.LoggerService;
+﻿using hsfl.ceho5518.vs.LoggerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void Start() {
+            Logger.Info("Starting Discovery Proxy...");
             try {
                 // Add DiscoveryEndpoint to receive Probe and Resolve messages
                 DiscoveryEndpoint discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));

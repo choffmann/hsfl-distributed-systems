@@ -1,4 +1,4 @@
-﻿using hsfl.ceho5518.vs.server.LoggerService;
+﻿using hsfl.ceho5518.vs.LoggerService;
 using PluginContract;
 using Spectre.Console;
 using System;

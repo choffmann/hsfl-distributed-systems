@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Discovery;
 using Spectre.Console;
 using System.Xml;
-using hsfl.ceho5518.vs.server.LoggerService;
+using hsfl.ceho5518.vs.LoggerService;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]

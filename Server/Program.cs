@@ -1,7 +1,7 @@
 ﻿using hsfl.ceho5518.vs.server.DiscoveryProxy;
 using hsfl.ceho5518.vs.server.Plugins;
 using hsfl.ceho5518.vs.server.Sate;
-using hsfl.ceho5518.vs.server.LoggerService;
+using hsfl.ceho5518.vs.LoggerService;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
