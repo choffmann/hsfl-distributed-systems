@@ -1,5 +1,18 @@
 # VS-Hausarbeit
 In der Hausarbeit geht es darum, ein Verteiltes System aufzubauen.
+
+## Core
+TODO: 
+
+### Master
+TODO: 
+
+### Worker
+TODO: 
+
+## Plugins
+TODO: 
+
 ## Logger
 Es gibt fünf verschiedene Loglevel mit sieben verschiedenen Methoden, die ausgewählt werden können.
 
