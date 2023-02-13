@@ -1,7 +1,10 @@
 ﻿using Spectre.Console;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,43 +46,63 @@ namespace hsfl.ceho5518.vs.LoggerService {
         }
 
         public static void Info(string message) {
-            if (_levelValue <= 1)
+            if (_levelValue <= 1) {
                 AnsiConsole.MarkupLine($"[gray][[INFO]][/] {message}");
+                WriteToLogFile("INFO", message);
+            }
         }
 
         public static void Success(string message) {
-            if (_levelValue <= 1)
+            if (_levelValue <= 1) {
                 AnsiConsole.MarkupLine($"[gray][[INFO]][/] [green]{message}[/]");
+                WriteToLogFile("SUCCESS", message);
+            }
         }
 
         public static void SuccessEmoji(string message) {
-            if (_levelValue <= 2)
+            if (_levelValue <= 2) {
                 AnsiConsole.MarkupLine($"[gray][[INFO]][/] :party_popper: [green]{message}[/]");
+                WriteToLogFile("SUCCESS", message);
+            }
         }
 
         public static void SuccessEmoji(string emoji, string message) {
-            if (_levelValue <= 2)
+            if (_levelValue <= 2) {
                 AnsiConsole.MarkupLine($"[gray][[INFO]][/] {emoji} [green]{message}[/]");
+                WriteToLogFile("SUCCESS", message);
+            }
         }
 
         public static void Warning(string message) {
-            if (_levelValue <= 3)
+            if (_levelValue <= 3) {
                 AnsiConsole.MarkupLine($"[orange4][[WARNING]][/] {message}");
+                WriteToLogFile("WARNING", message);
+            }
         }
 
         public static void Error(string message) {
-            if (_levelValue <= 4)
+            if (_levelValue <= 4) {
                 AnsiConsole.MarkupLine($"[red][[ERROR]][/] {message}");
+                WriteToLogFile("ERROR", message);
+            }
         }
 
         public static void Exception(Exception exception) {
-            if (_levelValue <= 0)
+            if (_levelValue <= 0) {
                 AnsiConsole.WriteException(exception);
+                WriteToLogFile("EXCEPTION", exception.ToString());
+            }
         }
 
         public static void Debug(string message) {
-            if (_levelValue <= 0)
+            if (_levelValue <= 0) {
                 AnsiConsole.MarkupLine($"[grey][[DEBUG]][/] {message}");
+                WriteToLogFile("DEBUG", message);
+            }
+        }
+
+        public static void WriteToLogFile(string level, string message) {
+            Trace.WriteLine(string.Format("{0} - [{1}] {2}", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), level, message));
         }
     }
 }

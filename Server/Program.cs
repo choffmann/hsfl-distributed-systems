@@ -14,14 +14,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters;
 using hsfl.ceho5518.vs.server.ConcreatService;
+using System.IO;
+using System.Diagnostics;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {
         static void Main(string[] args) {
             StartUp();
-
             SetupDiscovery();
-
             // Load Plugins
             LoadPlugins();
 
@@ -36,15 +36,27 @@ namespace hsfl.ceho5518.vs.server {
             // Set Text to UTF-8 to use Emojis and Spinners
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             // Set LogLevel
-            Logger.LogLevel = LogLevel.Info;
+            Logger.LogLevel = LogLevel.Debug;
 
             AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
                 .Start(
                 $"[yellow]Starting Server...[/]", ctx => {
+                    CreateAppDataFolder();
                     Thread.Sleep(2000);
-                    Logger.Info("Starting Server...");
                 });
+        }
+
+        private static void CreateAppDataFolder() {
+            Logger.Info("Setting up Enviroment Application Folder");
+            Logger.Debug($"Set Enviroment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
+            if (GlobalState.GetInstance().ClearAllOnStart) {
+                if (Directory.Exists(GlobalState.GetInstance().ApplicationDir)) {
+                    Logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");
+                    Directory.Delete(GlobalState.GetInstance().ApplicationDir);
+                }
+            }
+            Directory.CreateDirectory(GlobalState.GetInstance().ApplicationDir);
         }
 
         private static void SetupDiscovery() {
