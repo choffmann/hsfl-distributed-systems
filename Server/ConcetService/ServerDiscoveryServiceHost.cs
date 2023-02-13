@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ServerDiscoveryServiceHost {
+        private ILogger logger = Logger.Instance;
         private Uri baseAddress;
         private Uri announcementEndpointAddress;
         private ServiceHost serviceHost;
@@ -22,7 +23,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
 
         public void Start() {
-            Logger.Info("Starting Server Discovery Host...");
+            logger.Info("Starting Server Discovery Host...");
             try {
                 // Set Behavior
                 ServiceMetadataBehavior smb = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
@@ -48,14 +49,14 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
                 serviceHost.Open();
 
-                Logger.Info($"Discovery Service started at {baseAddress}");
+                logger.Info($"Discovery Service started at {baseAddress}");
 
             } catch (CommunicationException e) {
-                Logger.Exception(e);
-                Logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                logger.Exception(e);
+                logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             } catch (TimeoutException e) {
-                Logger.Exception(e);
-                Logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                logger.Exception(e);
+                logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             }
         }
 
@@ -65,7 +66,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
         public void Stop() {
             if (serviceHost.State != CommunicationState.Closed) {
-                Logger.Info("Aborting the Discovery service...");
+                logger.Info("Aborting the Discovery service...");
                 serviceHost.Abort();
             }
         }

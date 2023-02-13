@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class InvokeServerDiscovery {
+        private static ILogger logger = Logger.Instance;
         public static void InvokeDiscoveryService(EndpointAddress endpointAddress) {
+
             // Create a client
             ServerDiscoveryServiceClient client = new ServerDiscoveryServiceClient(new NetTcpBinding(), endpointAddress);
-            Logger.Info($"Invoking CalculatorService at {endpointAddress.Uri}");
+            logger.Info($"Invoking CalculatorService at {endpointAddress.Uri}");
 
             client.Connect(GlobalState.GetInstance().ServerId.ToString());
-            Logger.Info($"Hello to Master from Worker {GlobalState.GetInstance().ServerId}");
+            logger.Info($"Hello to Master from Worker {GlobalState.GetInstance().ServerId}");
 
             client.Close();
         }

@@ -12,7 +12,7 @@ using hsfl.ceho5518.vs.LoggerService;
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class DiscoveryProxyService : System.ServiceModel.Discovery.DiscoveryProxy {
-
+        private ILogger logger = Logger.Instance;
         Dictionary<EndpointAddress, EndpointDiscoveryMetadata> onlineServices;
 
         public DiscoveryProxyService() {
@@ -59,12 +59,12 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void PrintDiscoveryMetadata(EndpointDiscoveryMetadata endpointDiscoveryMetadata, string verb) {
-            Logger.Info($"[bold]{verb}[/] service of the following type from cache.");
+            logger.Info($"[bold]{verb}[/] service of the following type from cache.");
             foreach (XmlQualifiedName contractName in endpointDiscoveryMetadata.ContractTypeNames) {
-                Logger.Info($"{contractName}");
+                logger.Info($"{contractName}");
                 break;
             }
-            Logger.Success("Operation Completed");
+            logger.Success("Operation Completed");
 
         }
 

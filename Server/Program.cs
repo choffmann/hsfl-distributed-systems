@@ -14,20 +14,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters;
 using hsfl.ceho5518.vs.server.ConcreatService;
+using System.IO;
+using System.Diagnostics;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {
+        private static ILogger logger = Logger.Instance;
         static void Main(string[] args) {
+            
             StartUp();
-
             SetupDiscovery();
-
             // Load Plugins
             LoadPlugins();
 
             // Initialization done
-            Logger.SuccessEmoji("Initialization of System successfully");
-            Logger.Info("Waiting for a job...");
+            logger.SuccessEmoji("Initialization of System successfully");
+            logger.Info("Waiting for a job...");
 
             Console.ReadLine();
         }
@@ -36,15 +38,27 @@ namespace hsfl.ceho5518.vs.server {
             // Set Text to UTF-8 to use Emojis and Spinners
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             // Set LogLevel
-            Logger.LogLevel = LogLevel.Info;
+            logger.LogLevel = LogLevel.Debug;
 
             AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
                 .Start(
                 $"[yellow]Starting Server...[/]", ctx => {
+                    CreateAppDataFolder();
                     Thread.Sleep(2000);
-                    Logger.Info("Starting Server...");
                 });
+        }
+
+        private static void CreateAppDataFolder() {
+            logger.Info("Setting up Enviroment Application Folder");
+            logger.Debug($"Set Enviroment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
+            if (GlobalState.GetInstance().ClearAllOnStart) {
+                if (Directory.Exists(GlobalState.GetInstance().ApplicationDir)) {
+                    logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");
+                    Directory.Delete(GlobalState.GetInstance().ApplicationDir);
+                }
+            }
+            Directory.CreateDirectory(GlobalState.GetInstance().ApplicationDir);
         }
 
         private static void SetupDiscovery() {
@@ -53,7 +67,8 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void LoadPlugins() {
-            PluginService pluginService = new PluginService("C:\\Users\\hoffmann\\Documents\\FH Flensburg\\7. Semester\\Verteilte Systeme\\VS-Hausarbeit\\DemoPlugin\\bin\\Debug");
+            PluginService pluginService = new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
+            //PluginService pluginService = new PluginService();
         }
     }
 }

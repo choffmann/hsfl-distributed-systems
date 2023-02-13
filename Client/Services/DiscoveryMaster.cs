@@ -12,6 +12,7 @@ using hsfl.ceho5518.vs.server.ConcreatService;
 
 namespace hsfl.ceho5518.vs.Client.Services {
     public class DiscoveryMaster {
+        private ILogger logger = Logger.Instance;
         Uri probeEndpointAddress;
         DiscoveryEndpoint discoveryEndpoint;
         DiscoveryClient discoveryClient;
@@ -26,11 +27,11 @@ namespace hsfl.ceho5518.vs.Client.Services {
             AnsiConsole.Status().Spinner(Spinner.Known.BouncingBar).Start("[yellow]Try to find Master in Network[/]", ctx => {
                 try {
                     FindResponse findResponse = discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
-                    Logger.Info("Found the [bold]Master[/] in network");
+                    logger.Info("Found the [bold]Master[/] in network");
                     ctx.Status("[yellow]Connecting to Master...[/]");
                     //SetupWorkerDiscovery(findResponse.Endpoints[0].Address);
                 } catch (TargetInvocationException) {
-                    Logger.Error("[bold]No Master found in Network.[/]");
+                    logger.Error("[bold]No Master found in Network.[/]");
                 }
             });
         }

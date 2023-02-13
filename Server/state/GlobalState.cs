@@ -1,6 +1,7 @@
 ﻿using hsfl.ceho5518.vs.server.State;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel.Dispatcher;
 using System.Text;
@@ -11,7 +12,11 @@ namespace hsfl.ceho5518.vs.server.Sate {
         static GlobalState instance;
         public ServerState ServerState { get; set; }
         public Guid ServerId { get; } = Guid.NewGuid();
-        
+        public string ApplicationDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "hsfl", "ceho5518", "distributed-systems");
+
+        // Debug things...
+        public bool ClearAllOnStart { get; set; } = false;
+
         protected GlobalState() {
             // Set state to WORKER on default
             ServerState = ServerState.WORKER;

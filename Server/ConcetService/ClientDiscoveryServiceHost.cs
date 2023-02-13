@@ -1,17 +1,13 @@
-﻿using hsfl.ceho5518.vs.server;
+﻿using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.Sate;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
-using System.Text;
-using System.Threading.Tasks;
-using hsfl.ceho5518.vs.LoggerService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ClientDiscoveryServiceHost {
+        private ILogger logger = Logger.Instance;
         private Uri baseAddress;
         private Uri announcementEndpointAddress;
         private ServiceHost serviceHost;
@@ -23,7 +19,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
 
         public void Start() {
-            Logger.Info("Starting Client Discovery Host...");
+            logger.Info("Starting Client Discovery Host...");
             try {
                 // Set Behavior
                 ServiceMetadataBehavior smb = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
@@ -49,14 +45,14 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
                 serviceHost.Open();
 
-                Logger.Info($"Client Service started at {baseAddress}");
+                logger.Info($"Client Service started at {baseAddress}");
 
             } catch (CommunicationException e) {
-                Logger.Exception(e);
-                Logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
+                logger.Exception(e);
+                logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
             } catch (TimeoutException e) {
-                Logger.Exception(e);
-                Logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
+                logger.Exception(e);
+                logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
             }
         }
 
@@ -66,7 +62,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
         public void Stop() {
             if (serviceHost.State != CommunicationState.Closed) {
-                Logger.Info("Aborting the Client service...");
+                logger.Info("Aborting the Client service...");
                 serviceHost.Abort();
             }
         }
