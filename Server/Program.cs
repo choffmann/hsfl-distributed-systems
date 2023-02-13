@@ -19,15 +19,17 @@ using System.Diagnostics;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {
+        private static ILogger logger = Logger.Instance;
         static void Main(string[] args) {
+            
             StartUp();
             SetupDiscovery();
             // Load Plugins
             LoadPlugins();
 
             // Initialization done
-            Logger.SuccessEmoji("Initialization of System successfully");
-            Logger.Info("Waiting for a job...");
+            logger.SuccessEmoji("Initialization of System successfully");
+            logger.Info("Waiting for a job...");
 
             Console.ReadLine();
         }
@@ -36,7 +38,7 @@ namespace hsfl.ceho5518.vs.server {
             // Set Text to UTF-8 to use Emojis and Spinners
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             // Set LogLevel
-            Logger.LogLevel = LogLevel.Debug;
+            logger.LogLevel = LogLevel.Debug;
 
             AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
@@ -48,11 +50,11 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void CreateAppDataFolder() {
-            Logger.Info("Setting up Enviroment Application Folder");
-            Logger.Debug($"Set Enviroment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
+            logger.Info("Setting up Enviroment Application Folder");
+            logger.Debug($"Set Enviroment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
             if (GlobalState.GetInstance().ClearAllOnStart) {
                 if (Directory.Exists(GlobalState.GetInstance().ApplicationDir)) {
-                    Logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");
+                    logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");
                     Directory.Delete(GlobalState.GetInstance().ApplicationDir);
                 }
             }
@@ -65,7 +67,8 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void LoadPlugins() {
-            PluginService pluginService = new PluginService("C:\\Users\\hoffmann\\Documents\\FH Flensburg\\7. Semester\\Verteilte Systeme\\VS-Hausarbeit\\DemoPlugin\\bin\\Debug");
+            PluginService pluginService = new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
+            //PluginService pluginService = new PluginService();
         }
     }
 }

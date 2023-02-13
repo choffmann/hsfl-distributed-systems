@@ -7,8 +7,8 @@
     <ProjectGuid>{35D4FFF8-14A7-4FEE-B721-73FF00E9271C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>hsfl.ceho5518.vs.Logger</RootNamespace>
-    <AssemblyName>hsfl.ceho5518.vs.Logger</AssemblyName>
+    <RootNamespace>hsfl.ceho5518.vs.LoggerService</RootNamespace>
+    <AssemblyName>hsfl.ceho5518.vs.LoggerService</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -60,7 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILogger.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
