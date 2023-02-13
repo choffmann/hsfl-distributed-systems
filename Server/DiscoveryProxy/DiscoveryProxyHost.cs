@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     public class DiscoveryProxyHost {
+        private ILogger logger = Logger.Instance;
         private Uri probeEndpointAddress;
         private Uri announcementEndpointAddress;
         private ServiceHost proxyServiceHost;
@@ -20,7 +21,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void Start() {
-            Logger.Info("Starting Discovery Proxy...");
+            logger.Info("Starting Discovery Proxy...");
             try {
                 // Add DiscoveryEndpoint to receive Probe and Resolve messages
                 DiscoveryEndpoint discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));
@@ -34,17 +35,17 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
                 proxyServiceHost.Open();
 
-                Logger.Info("Proxy Service started.");
+                logger.Info("Proxy Service started.");
             } catch (CommunicationException e) {
-                Logger.Exception(e);
+                logger.Exception(e);
             } catch (TimeoutException e) {
-                Logger.Exception(e);
+                logger.Exception(e);
             }
         }
 
         public void Stop() {
             if (proxyServiceHost.State != CommunicationState.Closed) {
-                Logger.Info("Aborting the Proxy service...");
+                logger.Info("Aborting the Proxy service...");
                 proxyServiceHost.Abort();
             }
         }

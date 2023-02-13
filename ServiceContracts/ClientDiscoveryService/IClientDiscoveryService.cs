@@ -14,8 +14,9 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
     }
 
     public class ClientDiscoveryService : IClientDiscoveryService {
+        private ILogger logger = Logger.Instance;
         public void Connect(string message) {
-            Logger.Info($"Client with id {message} connected to the system");
+            logger.Info($"Client with id {message} connected to the system");
         }
     }
 }

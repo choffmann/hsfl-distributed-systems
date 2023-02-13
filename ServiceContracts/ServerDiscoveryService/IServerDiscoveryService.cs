@@ -14,11 +14,12 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
     }
 
     public class ServerDiscoveryService : IServerDiscoveryService {
+        private ILogger logger = Logger.Instance;
         public void Connect(string workerId) {
-            Logger.Info($"New Worker with id {workerId} connected to the system");
-            Logger.Debug($"Worker adresse: xxx");
-            Logger.Debug($"Worker mac: xxx");
-            Logger.Debug($"Worker information: xxx");
+            logger.Info($"New Worker with id {workerId} connected to the system");
+            logger.Debug($"Worker adresse: xxx");
+            logger.Debug($"Worker mac: xxx");
+            logger.Debug($"Worker information: xxx");
         }
     }
 }
