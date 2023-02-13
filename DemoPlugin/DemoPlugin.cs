@@ -1,5 +1,4 @@
-﻿using hsfl.ceho5518.vs.LoggerService;
-using PluginContract;
+﻿using PluginContract;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
