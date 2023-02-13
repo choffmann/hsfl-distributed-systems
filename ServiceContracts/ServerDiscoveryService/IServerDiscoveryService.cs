@@ -1,4 +1,4 @@
-﻿using hsfl.ceho5518.vs.server.LoggerService;
+﻿using hsfl.ceho5518.vs.LoggerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
     public class ServerDiscoveryService : IServerDiscoveryService {
         public void Connect(string workerId) {
-            Logger.Info($"New Worker with id {workerId} connected to the System.");
+            Logger.Info($"New Worker with id {workerId} connected to the system");
             Logger.Debug($"Worker adresse: xxx");
             Logger.Debug($"Worker mac: xxx");
             Logger.Debug($"Worker information: xxx");

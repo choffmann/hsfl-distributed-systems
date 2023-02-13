@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace hsfl.ceho5518.vs.server.LoggerService {
+namespace hsfl.ceho5518.vs.LoggerService {
     public enum LogLevel {
         Debug, Info, Success, Warning, Error
     }
@@ -44,7 +44,7 @@ namespace hsfl.ceho5518.vs.server.LoggerService {
 
         public static void Info(string message) {
             if (_levelValue <= 1)
-                AnsiConsole.MarkupLine($"[grey][[INFO]][/] {message}");
+                AnsiConsole.MarkupLine($"[gray][[INFO]][/] {message}");
         }
 
         public static void Success(string message) {
@@ -64,7 +64,7 @@ namespace hsfl.ceho5518.vs.server.LoggerService {
 
         public static void Warning(string message) {
             if (_levelValue <= 3)
-                AnsiConsole.MarkupLine($"[orange][[WARNING]][/] {message}");
+                AnsiConsole.MarkupLine($"[orange4][[WARNING]][/] {message}");
         }
 
         public static void Error(string message) {

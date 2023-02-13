@@ -1,4 +1,4 @@
-﻿using hsfl.ceho5518.vs.server.LoggerService;
+﻿using hsfl.ceho5518.vs.server;
 using hsfl.ceho5518.vs.server.Sate;
 using System;
 using System.Collections.Generic;
@@ -8,20 +8,22 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
 using System.Text;
 using System.Threading.Tasks;
+using hsfl.ceho5518.vs.LoggerService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
-    public class ServerDiscoveryServiceHost {
+    public class ClientDiscoveryServiceHost {
         private Uri baseAddress;
         private Uri announcementEndpointAddress;
         private ServiceHost serviceHost;
 
-        public ServerDiscoveryServiceHost() {
-            this.baseAddress = new Uri("net.tcp://localhost:9002/ServerDiscoveryService/" + GlobalState.GetInstance().ServerId);
-            this.announcementEndpointAddress = new Uri("net.tcp://localhost:9021/Announcement");
+        public ClientDiscoveryServiceHost() {
+            this.baseAddress = new Uri($"net.tcp://{Environment.MachineName}:9002/ClientDiscoveryService/" + GlobalState.GetInstance().ServerId);
+            this.announcementEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:9021/Announcement");
             this.serviceHost = new ServiceHost(typeof(ServerDiscoveryService), baseAddress);
         }
 
         public void Start() {
+            Logger.Info("Starting Client Discovery Host...");
             try {
                 // Set Behavior
                 ServiceMetadataBehavior smb = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
@@ -47,20 +49,24 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
                 serviceHost.Open();
 
-                Logger.Info($"Discovery Service started at {baseAddress}");
+                Logger.Info($"Client Service started at {baseAddress}");
 
             } catch (CommunicationException e) {
                 Logger.Exception(e);
-                Logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                Logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
             } catch (TimeoutException e) {
                 Logger.Exception(e);
-                Logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                Logger.Error($"Failed to load ClientDiscoveryHost. {e.Message}");
             }
+        }
+
+        public CommunicationState Status() {
+            return serviceHost.State;
         }
 
         public void Stop() {
             if (serviceHost.State != CommunicationState.Closed) {
-                Logger.Info("Aborting the Discovery service...");
+                Logger.Info("Aborting the Client service...");
                 serviceHost.Abort();
             }
         }

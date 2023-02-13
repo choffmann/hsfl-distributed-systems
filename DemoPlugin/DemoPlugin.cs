@@ -11,7 +11,7 @@ namespace DemoPlugin
         public string Name => "DemoPlugin";
 
         public void OnInit() {
-            //throw new NotImplementedException("Ein Fehler beim Aufruf von OnInit()");
+            throw new NotImplementedException("Ein Fehler beim Aufruf von OnInit()");
             Thread.Sleep(2000);
         }
 

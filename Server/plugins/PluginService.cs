@@ -1,4 +1,4 @@
-﻿using hsfl.ceho5518.vs.server.LoggerService;
+﻿using hsfl.ceho5518.vs.LoggerService;
 using PluginContract;
 using Spectre.Console;
 using System;
@@ -75,7 +75,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 pluginsList.Add(plugin);
             } catch(Exception ex) {
                 Logger.Exception(ex);
-                Logger.Error($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
+                Logger.Warning($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
             }
             
         }

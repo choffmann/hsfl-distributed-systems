@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using hsfl.ceho5518.vs.server.Sate;
-using hsfl.ceho5518.vs.server.LoggerService;
 using hsfl.ceho5518.vs.server.ConcreatService;
 using hsfl.ceho5518.vs.server.State;
+using hsfl.ceho5518.vs.LoggerService;
 using Spectre.Console;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
@@ -44,18 +44,29 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
             DiscoveryProxyHost proxyHost = new DiscoveryProxyHost();
             ServerDiscoveryServiceHost discoveryHost = new ServerDiscoveryServiceHost();
-
+            ClientDiscoveryServiceHost clientHost = new ClientDiscoveryServiceHost();
             proxyHost.Start();
             discoveryHost.Start();
+            clientHost.Start();
 
-            Logger.Success($"Initializat Master successfully");
+            //AnsiConsole.MarkupLine(.ToString());
+
+            if (discoveryHost.Status().Equals(CommunicationState.Faulted) && clientHost.Status().Equals(CommunicationState.Faulted)) {
+                Logger.Error("System can't start the Server. [bold red]Shutdown the Application...[/]");
+                Console.ReadLine();
+                Environment.Exit(100);
+            }
+
+            // TODO: Check if start is successfully
+
+            Logger.Success($"Initialized Master successfully");
         }
 
         private void SetupWorkerDiscovery(EndpointAddress endpointAddress) {
             GlobalState.GetInstance().ServerState = ServerState.MASTER;
             InvokeServerDiscovery.InvokeDiscoveryService(endpointAddress);
 
-            Logger.Success($"Initializat Worker successfully");
+            Logger.Success($"Initialized Worker successfully");
         }
     }
 }
