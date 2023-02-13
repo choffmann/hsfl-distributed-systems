@@ -49,6 +49,16 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             discoveryHost.Start();
             clientHost.Start();
 
+            //AnsiConsole.MarkupLine(.ToString());
+
+            if (discoveryHost.Status().Equals(CommunicationState.Faulted) && clientHost.Status().Equals(CommunicationState.Faulted)) {
+                Logger.Error("System can't start the Server. [bold red]Shutdown the Application...[/]");
+                Console.ReadLine();
+                Environment.Exit(100);
+            }
+
+            // TODO: Check if start is successfully
+
             Logger.Success($"Initialized Master successfully");
         }
 

@@ -14,8 +14,8 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         private ServiceHost proxyServiceHost;
 
         public DiscoveryProxyHost() {
-            this.probeEndpointAddress = new Uri("net.tcp://localhost:8001/Probe");
-            this.announcementEndpointAddress = new Uri("net.tcp://localhost:9021/Announcement");
+            this.probeEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:8001/Probe");
+            this.announcementEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:9021/Announcement");
             this.proxyServiceHost = new ServiceHost(new DiscoveryProxyService());
         }
 

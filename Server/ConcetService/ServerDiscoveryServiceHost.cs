@@ -16,8 +16,8 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         private ServiceHost serviceHost;
 
         public ServerDiscoveryServiceHost() {
-            this.baseAddress = new Uri("net.tcp://localhost:9002/ServerDiscoveryService/" + GlobalState.GetInstance().ServerId);
-            this.announcementEndpointAddress = new Uri("net.tcp://localhost:9021/Announcement");
+            this.baseAddress = new Uri($"net.tcp://{Environment.MachineName}:9002/ServerDiscoveryService/" + GlobalState.GetInstance().ServerId);
+            this.announcementEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:9021/Announcement");
             this.serviceHost = new ServiceHost(typeof(ServerDiscoveryService), baseAddress);
         }
 
@@ -57,6 +57,10 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 Logger.Exception(e);
                 Logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             }
+        }
+
+        public CommunicationState Status() {
+            return serviceHost.State;
         }
 
         public void Stop() {
