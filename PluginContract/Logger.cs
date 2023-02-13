@@ -17,11 +17,11 @@ namespace PluginContract {
         public static Logger Instance { get { return instance; } }
 
         public void Debug(string message) {
-            logger.Debug($"{PluginName}: {message}");
+            logger.Debug($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Error(string message) {
-            logger.Error($"{PluginName}: {message}");
+            logger.Error($"[red]{PluginName}[/]: {message}");
         }
 
         public void Exception(Exception exception) {
@@ -29,23 +29,23 @@ namespace PluginContract {
         }
 
         public void Info(string message) {
-            logger.Info($"{PluginName}: {message}");
+            logger.Info($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Success(string message) {
-            logger.Success($"{PluginName}: {message}");
+            logger.Success($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void SuccessEmoji(string message) {
-            logger.SuccessEmoji($"{PluginName}: {message}");
+            logger.SuccessEmoji($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void SuccessEmoji(string emoji, string message) {
-            logger.SuccessEmoji(emoji, $"{PluginName}: {message}");
+            logger.SuccessEmoji(emoji, $"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Warning(string message) {
-            logger.Warning($"{PluginName}: {message}");
+            logger.Warning($"[orange4]{PluginName}[/]: {message}");
         }
 
         public void WriteToLogFile(string level, string message) {
