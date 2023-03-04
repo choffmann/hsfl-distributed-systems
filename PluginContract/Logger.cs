@@ -9,47 +9,46 @@ namespace PluginContract {
     public class Logger : ILogger {
         public LogLevel LogLevel { get; set; }
         public string PluginName { get; set; }
-        private ILogger logger = hsfl.ceho5518.vs.LoggerService.Logger.Instance;
-        private static PluginContract.Logger instance = new PluginContract.Logger();
+        private readonly ILogger logger = hsfl.ceho5518.vs.LoggerService.Logger.Instance;
 
         private Logger() { }
 
-        public static Logger Instance { get { return instance; } }
+        public static Logger Instance { get; } = new PluginContract.Logger();
 
         public void Debug(string message) {
-            logger.Debug($"[turquoise2]{PluginName}[/]: {message}");
+            this.logger.Debug($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Error(string message) {
-            logger.Error($"[red]{PluginName}[/]: {message}");
+            this.logger.Error($"[red]{PluginName}[/]: {message}");
         }
 
         public void Exception(Exception exception) {
-            logger.Exception(exception);
+            this.logger.Exception(exception);
         }
 
         public void Info(string message) {
-            logger.Info($"[turquoise2]{PluginName}[/]: {message}");
+            this.logger.Info($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Success(string message) {
-            logger.Success($"[turquoise2]{PluginName}[/]: {message}");
+            this.logger.Success($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void SuccessEmoji(string message) {
-            logger.SuccessEmoji($"[turquoise2]{PluginName}[/]: {message}");
+            this.logger.SuccessEmoji($"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void SuccessEmoji(string emoji, string message) {
-            logger.SuccessEmoji(emoji, $"[turquoise2]{PluginName}[/]: {message}");
+            this.logger.SuccessEmoji(emoji, $"[turquoise2]{PluginName}[/]: {message}");
         }
 
         public void Warning(string message) {
-            logger.Warning($"[orange4]{PluginName}[/]: {message}");
+            this.logger.Warning($"[orange4]{PluginName}[/]: {message}");
         }
 
         public void WriteToLogFile(string level, string message) {
-            logger.WriteToLogFile(level, $"{PluginName}: {message}");
+            this.logger.WriteToLogFile(level, $"{PluginName}: {message}");
         }
     }
 }

@@ -30,24 +30,17 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
                 this.serviceHost.Description.Behaviors.Add(smb);
                 this.serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
-
-                var netTcpEndpoint = this.serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService),
-                    new NetTcpBinding(), string.Empty);
+                this.serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService), new NetTcpBinding(), string.Empty);
 
                 // Create an announcement endpoint, which points to the Announcement Endpoint hosted by the proxy service.
-                var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(),
-                    new EndpointAddress(announcementEndpointAddress));
-
+                var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(), new EndpointAddress(this.announcementEndpointAddress));
                 var serviceDiscoveryBehavior = new ServiceDiscoveryBehavior();
                 serviceDiscoveryBehavior.AnnouncementEndpoints.Add(announcementEndpoint);
 
                 // Make the service discoverable
                 this.serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
-
                 this.serviceHost.Open();
-
                 this.logger.Info($"Discovery Service started at {baseAddress}");
-
             } catch (CommunicationException e) {
                 this.logger.Exception(e);
                 this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");

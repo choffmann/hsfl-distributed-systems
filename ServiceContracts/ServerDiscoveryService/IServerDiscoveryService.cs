@@ -18,9 +18,9 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
     }
 
     public class ServerDiscoveryService : IServerDiscoveryService {
-        private ILogger logger = Logger.Instance;
+        private readonly ILogger logger = Logger.Instance;
         //private List<IServerDiscoveryServiceCallback> workers = new List<IServerDiscoveryServiceCallback>();
-        private Dictionary<string, IServerDiscoveryServiceCallback> workers = new Dictionary<string, IServerDiscoveryServiceCallback>();
+        private readonly Dictionary<string, IServerDiscoveryServiceCallback> workers = new Dictionary<string, IServerDiscoveryServiceCallback>();
         public void Connect(string workerId) {
             this.logger.Info($"New Worker with id {workerId} connected to the system");
             var callback = OperationContext.Current.GetCallbackChannel<IServerDiscoveryServiceCallback>();

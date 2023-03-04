@@ -12,22 +12,22 @@ using hsfl.ceho5518.vs.LoggerService;
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class DiscoveryProxyService : System.ServiceModel.Discovery.DiscoveryProxy {
-        private ILogger logger = Logger.Instance;
-        Dictionary<EndpointAddress, EndpointDiscoveryMetadata> onlineServices;
+        private readonly ILogger logger = Logger.Instance;
+        readonly Dictionary<EndpointAddress, EndpointDiscoveryMetadata> onlineServices;
 
         public DiscoveryProxyService() {
             this.onlineServices = new Dictionary<EndpointAddress, EndpointDiscoveryMetadata>();
         }
 
         // The following are helper methods required by the Proxy implementation
-        public void AddOnlineService(EndpointDiscoveryMetadata endpointDiscoveryMetadata) {
+        private void AddOnlineService(EndpointDiscoveryMetadata endpointDiscoveryMetadata) {
             lock (this.onlineServices) {
                 this.onlineServices[endpointDiscoveryMetadata.Address] = endpointDiscoveryMetadata;
             }
             PrintDiscoveryMetadata(endpointDiscoveryMetadata, "Adding");
         }
 
-        public void RemoveOnlineService(EndpointDiscoveryMetadata endpointDiscoveryMetadata) {
+        private void RemoveOnlineService(EndpointDiscoveryMetadata endpointDiscoveryMetadata) {
             if (endpointDiscoveryMetadata != null) {
                 lock (this.onlineServices) {
                     this.onlineServices.Remove(endpointDiscoveryMetadata.Address);
@@ -36,50 +36,46 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             PrintDiscoveryMetadata(endpointDiscoveryMetadata, "Removing");
         }
 
-        public void MatchFromOnlineService(FindRequestContext findRequestContext) {
+        private void MatchFromOnlineService(FindRequestContext findRequestContext) {
             lock (this.onlineServices) {
-                foreach (EndpointDiscoveryMetadata endpointDiscoveryMetadata in this.onlineServices.Values) {
-                    if (findRequestContext.Criteria.IsMatch(endpointDiscoveryMetadata)) {
-                        findRequestContext.AddMatchingEndpoint(endpointDiscoveryMetadata);
-                    }
+                foreach (var endpointDiscoveryMetadata in this.onlineServices.Values.Where(endpointDiscoveryMetadata => findRequestContext.Criteria.IsMatch(endpointDiscoveryMetadata))) {
+                    findRequestContext.AddMatchingEndpoint(endpointDiscoveryMetadata);
                 }
             }
         }
 
-        EndpointDiscoveryMetadata MatchFromOnlineService(ResolveCriteria criteria) {
+        private EndpointDiscoveryMetadata MatchFromOnlineService(ResolveCriteria criteria) {
             EndpointDiscoveryMetadata matchingEndpoint = null;
             lock (this.onlineServices) {
-                foreach (EndpointDiscoveryMetadata endpointDiscoveryMetadata in this.onlineServices.Values) {
-                    if (criteria.Address == endpointDiscoveryMetadata.Address) {
-                        matchingEndpoint = endpointDiscoveryMetadata;
-                    }
+                foreach (var endpointDiscoveryMetadata in this.onlineServices.Values.Where(endpointDiscoveryMetadata => criteria.Address == endpointDiscoveryMetadata.Address)) {
+                    matchingEndpoint = endpointDiscoveryMetadata;
                 }
             }
             return matchingEndpoint;
         }
 
-        public void PrintDiscoveryMetadata(EndpointDiscoveryMetadata endpointDiscoveryMetadata, string verb) {
-            logger.Info($"[bold]{verb}[/] service of the following type from cache.");
-            foreach (XmlQualifiedName contractName in endpointDiscoveryMetadata.ContractTypeNames) {
-                logger.Debug($"Contract Name: {contractName}");
+        private void PrintDiscoveryMetadata(EndpointDiscoveryMetadata endpointDiscoveryMetadata, string verb) {
+            this.logger.Info($"[bold]{verb}[/] service of the following type from cache.");
+            foreach (var contractName in endpointDiscoveryMetadata.ContractTypeNames) {
+                this.logger.Debug($"Contract Name: {contractName}");
                 break;
             }
-            logger.Success("Operation Completed");
+            this.logger.Success("Operation Completed");
         }
 
-        sealed class OnOnlineAnnouncementAsyncResult : AsyncResult {
+        private sealed class OnOnlineAnnouncementAsyncResult : AsyncResult {
             public OnOnlineAnnouncementAsyncResult(AsyncCallback callback, object state) : base(callback, state) {
-                this.Complete(true);
+                Complete(true);
             }
             public static void End(IAsyncResult result) {
                 AsyncResult.End<OnOnlineAnnouncementAsyncResult>(result);
             }
         }
 
-        sealed class OnOfflineAnnouncementAsyncResult : AsyncResult {
+        private sealed class OnOfflineAnnouncementAsyncResult : AsyncResult {
             public OnOfflineAnnouncementAsyncResult(AsyncCallback callback, object state)
                 : base(callback, state) {
-                this.Complete(true);
+                Complete(true);
             }
 
             public static void End(IAsyncResult result) {
@@ -87,10 +83,10 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             }
         }
 
-        sealed class OnFindAsyncResult : AsyncResult {
+        private sealed class OnFindAsyncResult : AsyncResult {
             public OnFindAsyncResult(AsyncCallback callback, object state)
                 : base(callback, state) {
-                this.Complete(true);
+                Complete(true);
             }
 
             public static void End(IAsyncResult result) {
@@ -98,24 +94,24 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             }
         }
 
-        sealed class OnResolveAsyncResult : AsyncResult {
-            EndpointDiscoveryMetadata matchingEndpoint;
+        private sealed class OnResolveAsyncResult : AsyncResult {
+            private readonly EndpointDiscoveryMetadata matchingEndpoint;
 
             public OnResolveAsyncResult(EndpointDiscoveryMetadata matchingEndpoint, AsyncCallback callback, object state)
                 : base(callback, state) {
                 this.matchingEndpoint = matchingEndpoint;
-                this.Complete(true);
+                Complete(true);
             }
 
             public static EndpointDiscoveryMetadata End(IAsyncResult result) {
-                OnResolveAsyncResult thisPtr = AsyncResult.End<OnResolveAsyncResult>(result);
+                var thisPtr = AsyncResult.End<OnResolveAsyncResult>(result);
                 return thisPtr.matchingEndpoint;
             }
         }
 
         // OnBeginOnlineAnnouncement method is called when a Hello message is received by the Proxy
         protected override IAsyncResult OnBeginOnlineAnnouncement(DiscoveryMessageSequence messageSequence, EndpointDiscoveryMetadata endpointDiscoveryMetadata, AsyncCallback callback, object state) {
-            this.AddOnlineService(endpointDiscoveryMetadata);
+            AddOnlineService(endpointDiscoveryMetadata);
             return new OnOnlineAnnouncementAsyncResult(callback, state);
         }
 
@@ -125,7 +121,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
         // OnBeginOfflineAnnouncement method is called when a Bye message is received by the Proxy
         protected override IAsyncResult OnBeginOfflineAnnouncement(DiscoveryMessageSequence messageSequence, EndpointDiscoveryMetadata endpointDiscoveryMetadata, AsyncCallback callback, object state) {
-            this.RemoveOnlineService(endpointDiscoveryMetadata);
+            RemoveOnlineService(endpointDiscoveryMetadata);
             return new OnOfflineAnnouncementAsyncResult(callback, state);
         }
 
@@ -135,7 +131,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
 
         // OnBeginFind method is called when a Probe request message is received by the Proxy
         protected override IAsyncResult OnBeginFind(FindRequestContext findRequestContext, AsyncCallback callback, object state) {
-            this.MatchFromOnlineService(findRequestContext);
+            MatchFromOnlineService(findRequestContext);
             return new OnFindAsyncResult(callback, state);
         }
 
