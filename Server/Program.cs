@@ -51,8 +51,8 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void CreateAppDataFolder() {
-            logger.Info("Setting up Enviroment Application Folder");
-            logger.Debug($"Set Enviroment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
+            logger.Info("Setting up Environment Application Folder");
+            logger.Debug($"Set Environment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
             if (GlobalState.GetInstance().ClearAllOnStart) {
                 if (Directory.Exists(GlobalState.GetInstance().ApplicationDir)) {
                     logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");

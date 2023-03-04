@@ -15,7 +15,7 @@ namespace hsfl.ceho5518.vs.Client {
             // Set LogLevel
             logger.LogLevel = LogLevel.Info;
 
-            DiscoveryMaster discovery = new DiscoveryMaster(new Uri("net.tcp://localhost:8001/Probe"));
+            var discovery = new DiscoveryMaster(new Uri("net.tcp://localhost:8001/Probe"));
             discovery.SetupProxy();
 
             Console.ReadLine();

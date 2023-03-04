@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.Plugins {
     public class PluginService {
-        private ILogger logger = LoggerService.Logger.Instance;
-        private List<PluginContract.Plugin> pluginsList = new List<PluginContract.Plugin>();
-        private string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+        private readonly ILogger logger = LoggerService.Logger.Instance;
+        private readonly List<PluginContract.Plugin> pluginsList = new List<PluginContract.Plugin>();
+        private readonly string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
 
         public PluginService() {
             AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
             $"Register Plugins...", ctx => {
-                logger.Debug($"Plugin path is {pluginPath}");
+                this.logger.Debug($"Plugin path is {this.pluginPath}");
                 // Load Plugins
                 LoadPlugins();
                 ctx.Status("Startup Plugins...");
@@ -44,10 +44,10 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         private void LoadPlugins() {
-            logger.Debug($"Load plugins from path: [bold gray]{pluginPath}[/]");
+            this.logger.Debug($"Load plugins from path: [bold gray]{this.pluginPath}[/]");
             try {
-                var dlls = Directory.GetFiles(pluginPath, "*.dll");
-                foreach (var dll in dlls) {
+                string[] dlls = Directory.GetFiles(this.pluginPath, "*.dll");
+                foreach (string dll in dlls) {
                     var ass = Assembly.LoadFrom(dll);
                     var plugins = ass.GetTypes().Where(w => typeof(PluginContract.Plugin).IsAssignableFrom(w));
                     foreach (var plugin in plugins) {
@@ -56,64 +56,64 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                     }
                 }
             } catch (DirectoryNotFoundException ex) {
-                logger.Exception(ex);
-                logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
+                this.logger.Exception(ex);
+                this.logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
             } catch (ReflectionTypeLoadException ex) {
-                logger.Exception(ex);
-                logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
+                this.logger.Exception(ex);
+                this.logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
             }
-            if (LoadedPlungins() > 0) {
-                logger.Success($"Successfully load [bold green]{LoadedPlungins()}[/] plugins");
+            if (LoadedPlugins() > 0) {
+                this.logger.Success($"Successfully load [bold green]{LoadedPlugins()}[/] plugins");
             } else {
-                logger.Info("No plugins loaded");
+                this.logger.Info("No plugins loaded");
             }
         }
 
         // Total amount of loaded plugins
-        public int LoadedPlungins() {
-            return pluginsList.Count;
+        public int LoadedPlugins() {
+            return this.pluginsList.Count;
         }
 
         public void ReloadPlugins() {
-            logger.Info("Reloading plugins...");
-            pluginsList.Clear();
+            this.logger.Info("Reloading plugins...");
+            this.pluginsList.Clear();
             LoadPlugins();
-            logger.SuccessEmoji("Reloading plugins successfully");
+            this.logger.SuccessEmoji("Reloading plugins successfully");
         }
 
-        public void OnInit(Plugin plugin) {
+        private void OnInit(Plugin plugin) {
             try {
-                logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
+                this.logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
                 plugin.OnInit();
-                logger.Success($"Successfully register plugin {plugin.Name}");
-                pluginsList.Add(plugin);
+                this.logger.Success($"Successfully register plugin {plugin.Name}");
+                this.pluginsList.Add(plugin);
             } catch(Exception ex) {
-                logger.Exception(ex);
-                logger.Warning($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
+                this.logger.Exception(ex);
+                this.logger.Warning($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
             }
             
         }
 
-        public void OnStartup() {
-            foreach (var plugin in pluginsList) {
+        private void OnStartup() {
+            foreach (var plugin in this.pluginsList) {
                 try {
-                    logger.Info($"Start Plugin {plugin.Name}");
+                    this.logger.Info($"Start Plugin {plugin.Name}");
                     plugin.OnStartup();
-                    logger.Success($"Successfully start plugin [bold springgreen3]{plugin.Name}[/]");
+                    this.logger.Success($"Successfully start plugin [bold springgreen3]{plugin.Name}[/]");
                 } catch (Exception ex) {
-                    logger.Exception(ex);
-                    logger.Error($"Failed to startup plugin {plugin.Name}. {ex.Message}");
+                    this.logger.Exception(ex);
+                    this.logger.Error($"Failed to startup plugin {plugin.Name}. {ex.Message}");
                 }
             }
         }
 
         public void OnStop() {
-            foreach (var plugin in pluginsList) {
-                logger.Info($"Deregister plugin [gray]{plugin.Name}[/]");
+            foreach (var plugin in this.pluginsList) {
+                this.logger.Info($"Deregister plugin [gray]{plugin.Name}[/]");
                 plugin.OnStop();
             }
-            logger.Info("Startup Plugins...");
-            logger.Success($"Successfully start [bold green]{LoadedPlungins()}[/] plugins");
+            this.logger.Info("Startup Plugins...");
+            this.logger.Success($"Successfully start [bold green]{LoadedPlugins()}[/] plugins");
         }
     }
 }

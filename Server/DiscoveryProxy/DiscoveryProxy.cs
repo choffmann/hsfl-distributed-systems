@@ -14,27 +14,24 @@ using Spectre.Console;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     public class DiscoveryProxy {
-        private ILogger logger = Logger.Instance;
-        Uri probeEndpointAddress;
-        DiscoveryEndpoint discoveryEndpoint;
-        DiscoveryClient discoveryClient;
+        private readonly ILogger logger = Logger.Instance;
+        private readonly DiscoveryClient discoveryClient;
 
         public DiscoveryProxy(Uri probeEndpointAddress) {
-            this.probeEndpointAddress = probeEndpointAddress;
-            this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.probeEndpointAddress));
-            this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
+            var discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));
+            this.discoveryClient = new DiscoveryClient(discoveryEndpoint);
         }
 
         public void SetupProxy() {
             AnsiConsole.Status().Spinner(Spinner.Known.Earth).Start("[yellow]Try to find Master in Network[/]", ctx => {
                 try {
-                    FindResponse findResponse = discoveryClient.Find(new FindCriteria(typeof(IServerDiscoveryService)));
-                    logger.Info("Found the [bold]Master[/] in network, system become a Worker");
+                    var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IServerDiscoveryService)));
+                    this.logger.Info("Found the [bold]Master[/] in network, system become a Worker");
                     ctx.Status("[yellow]Start Server as Worker[/]");
                     SetupWorkerDiscovery(findResponse.Endpoints[0].Address);
                 }
                 catch (TargetInvocationException) {
-                    logger.Info("[bold]No Master found in Network.[/] Setting this instance to [bold grey]Master[/]");
+                    this.logger.Info("[bold]No Master found in Network.[/] Setting this instance to [bold grey]Master[/]");
                     ctx.Status("[yellow]Start Server as Master[/]");
                     SetupMasterDiscovery();
                 }

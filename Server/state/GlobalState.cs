@@ -17,16 +17,13 @@ namespace hsfl.ceho5518.vs.server.Sate {
         // Debug things...
         public bool ClearAllOnStart { get; set; } = false;
 
-        protected GlobalState() {
+        private GlobalState() {
             // Set state to WORKER on default
             ServerState = ServerState.WORKER;
         }
 
         public static GlobalState GetInstance() {
-            if (instance == null) {
-                instance = new GlobalState();
-            }
-            return instance;
+            return instance ??= new GlobalState();
         }
     }
 }

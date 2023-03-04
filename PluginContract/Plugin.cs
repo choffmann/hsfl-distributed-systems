@@ -15,8 +15,8 @@ namespace PluginContract {
         }
 
         public Plugin(string pluginName) {
-            Name = pluginName;
-            Logger.PluginName = pluginName;
+            this.Name = pluginName;
+            this.Logger.PluginName = pluginName;
         }
 
         public virtual void OnInit() {

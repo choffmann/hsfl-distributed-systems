@@ -26,7 +26,7 @@ namespace hsfl.ceho5518.vs.Client.Services {
         public void SetupProxy() {
             AnsiConsole.Status().Spinner(Spinner.Known.BouncingBar).Start("[yellow]Try to find Master in Network[/]", ctx => {
                 try {
-                    FindResponse findResponse = discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
+                    var findResponse = discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
                     logger.Info("Found the [bold]Master[/] in network");
                     ctx.Status("[yellow]Connecting to Master...[/]");
                     //SetupWorkerDiscovery(findResponse.Endpoints[0].Address);

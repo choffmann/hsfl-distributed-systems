@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DemoPlugin
 {
-    public class DemoPlugin : PluginContract.Plugin {
+    public class DemoPlugin : Plugin {
 
         public DemoPlugin(): base("DemoPlugin") { }
 
@@ -24,14 +24,14 @@ namespace DemoPlugin
         }
 
         private void TestLogger() {
-            Logger.Debug($"Eine Debug Ausgabe vom Plugin :bug:");
-            Logger.Info($"Eine Info Ausgabe vom Plugin :waving_hand:");
-            Logger.Success($"Eine Erfolgreiche Ausgabe vom Plugin :check_mark_button:");
-            Logger.SuccessEmoji($"Eine Erfolgreiche Ausgabe vom Plugin mit Emoji");
-            Logger.SuccessEmoji(":otter:", "Eine Erfolgreiche Ausgabe vom Plugin mit eigenen Emoji");
-            Logger.Warning($"Eine Warnung Ausgabe vom Plugin :warning:");
-            Logger.Error($"Eine Fehler Ausgabe vom Plugin :cross_mark:");
-            Logger.WriteToLogFile("DEBUG", "Eine Ausgabe nur in die Log-File vom Plugin");
+            this.Logger.Debug($"Eine Debug Ausgabe vom Plugin :bug:");
+            this.Logger.Info($"Eine Info Ausgabe vom Plugin :waving_hand:");
+            this.Logger.Success($"Eine Erfolgreiche Ausgabe vom Plugin :check_mark_button:");
+            this.Logger.SuccessEmoji($"Eine Erfolgreiche Ausgabe vom Plugin mit Emoji");
+            this.Logger.SuccessEmoji(":otter:", "Eine Erfolgreiche Ausgabe vom Plugin mit eigenen Emoji");
+            this.Logger.Warning($"Eine Warnung Ausgabe vom Plugin :warning:");
+            this.Logger.Error($"Eine Fehler Ausgabe vom Plugin :cross_mark:");
+            this.Logger.WriteToLogFile("DEBUG", "Eine Ausgabe nur in die Log-File vom Plugin");
         }
     }
 }

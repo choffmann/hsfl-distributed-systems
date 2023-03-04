@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
     public class DiscoveryProxyHost {
-        private ILogger logger = Logger.Instance;
-        private Uri probeEndpointAddress;
-        private Uri announcementEndpointAddress;
-        private ServiceHost proxyServiceHost;
+        private readonly ILogger logger = Logger.Instance;
+        private readonly Uri probeEndpointAddress;
+        private readonly Uri announcementEndpointAddress;
+        private readonly ServiceHost proxyServiceHost;
 
         public DiscoveryProxyHost() {
             this.probeEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:8001/Probe");
@@ -21,33 +21,31 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void Start() {
-            logger.Info("Starting Discovery Proxy...");
+            this.logger.Info("Starting Discovery Proxy...");
             try {
                 // Add DiscoveryEndpoint to receive Probe and Resolve messages
-                DiscoveryEndpoint discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));
-                discoveryEndpoint.IsSystemEndpoint = false;
-
+                var discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.probeEndpointAddress)) {
+                    IsSystemEndpoint = false
+                };
                 // Add AnnouncementEndpoint to receive Hello and Bye announcement messages
-                AnnouncementEndpoint announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(), new EndpointAddress(announcementEndpointAddress));
+                var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(), new EndpointAddress(this.announcementEndpointAddress));
 
-                proxyServiceHost.AddServiceEndpoint(discoveryEndpoint);
-                proxyServiceHost.AddServiceEndpoint(announcementEndpoint);
-
-                proxyServiceHost.Open();
-
-                logger.Info("Proxy Service started.");
+                this.proxyServiceHost.AddServiceEndpoint(discoveryEndpoint);
+                this.proxyServiceHost.AddServiceEndpoint(announcementEndpoint);
+                this.proxyServiceHost.Open();
+                this.logger.Info("Proxy Service started.");
             } catch (CommunicationException e) {
-                logger.Exception(e);
+                this.logger.Exception(e);
             } catch (TimeoutException e) {
-                logger.Exception(e);
+                this.logger.Exception(e);
             }
         }
 
         public void Stop() {
-            if (proxyServiceHost.State != CommunicationState.Closed) {
-                logger.Info("Aborting the Proxy service...");
-                proxyServiceHost.Abort();
-            }
+            if (this.proxyServiceHost.State == CommunicationState.Closed)
+                return;
+            this.logger.Info("Aborting the Proxy service...");
+            this.proxyServiceHost.Abort();
         }
     }
 }
