@@ -16,6 +16,7 @@ using System.Runtime.Serialization.Formatters;
 using hsfl.ceho5518.vs.server.ConcreatService;
 using System.IO;
 using System.Diagnostics;
+using System.Timers;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {

@@ -8,18 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
-    public class InvokeServerDiscovery {
-        private static ILogger logger = Logger.Instance;
-        public static void InvokeDiscoveryService(EndpointAddress endpointAddress) {
+    public class InvokeServerDiscovery : IServerDiscoveryServiceCallback {
+        private readonly ILogger logger = Logger.Instance;
+        private IServerDiscoveryService serviceProxy;
 
-            // Create a client
-            ServerDiscoveryServiceClient client = new ServerDiscoveryServiceClient(new NetTcpBinding(), endpointAddress);
-            logger.Info($"Invoking CalculatorService at {endpointAddress.Uri}");
+        public void Connect(EndpointAddress endpointAddress) {
+            this.logger.Info($"Invoking ServerDiscoveryServiceClient at {endpointAddress.Uri}");
+            var instanceContext = new InstanceContext(this);
+            var channelFactory = new DuplexChannelFactory<IServerDiscoveryService>(instanceContext, new NetTcpBinding(), endpointAddress);
+            this.serviceProxy = channelFactory.CreateChannel();
+            this.serviceProxy.Connect(GlobalState.GetInstance().ServerId.ToString());
+        }
 
-            client.Connect(GlobalState.GetInstance().ServerId.ToString());
-            logger.Info($"Hello to Master from Worker {GlobalState.GetInstance().ServerId}");
-
-            client.Close();
+        public void OnMessage(string message) {
+            this.logger.Info($"Message from Master: {message}");
         }
     }
 }

@@ -32,42 +32,50 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
                     logger.Info("Found the [bold]Master[/] in network, system become a Worker");
                     ctx.Status("[yellow]Start Server as Worker[/]");
                     SetupWorkerDiscovery(findResponse.Endpoints[0].Address);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException) {
                     logger.Info("[bold]No Master found in Network.[/] Setting this instance to [bold grey]Master[/]");
                     ctx.Status("[yellow]Start Server as Master[/]");
                     SetupMasterDiscovery();
+                }
+                catch (Exception ex) {
+                    this.logger.Error("Unexpected Error on creating DiscoveryProxy. [bold red]Shutdown the Application...[/]");
+                    this.logger.Exception(ex);
+                    Console.ReadLine();
+                    Environment.Exit(100);
                 }
             });
         }
 
         private void SetupMasterDiscovery() {
-            GlobalState.GetInstance().ServerState = ServerState.WORKER;
+            GlobalState.GetInstance().ServerState = ServerState.MASTER;
 
-            DiscoveryProxyHost proxyHost = new DiscoveryProxyHost();
-            ServerDiscoveryServiceHost discoveryHost = new ServerDiscoveryServiceHost();
-            ClientDiscoveryServiceHost clientHost = new ClientDiscoveryServiceHost();
+            var proxyHost = new DiscoveryProxyHost();
+            var discoveryHost = new ServerDiscoveryServiceHost();
+            var clientHost = new ClientDiscoveryServiceHost();
             proxyHost.Start();
             discoveryHost.Start();
             clientHost.Start();
 
-            //AnsiConsole.MarkupLine(.ToString());
-
-            if (discoveryHost.Status().Equals(CommunicationState.Faulted) && clientHost.Status().Equals(CommunicationState.Faulted)) {
-                logger.Error("System can't start the Server. [bold red]Shutdown the Application...[/]");
+            if (discoveryHost.Status().Equals(CommunicationState.Opened) && clientHost.Status().Equals(CommunicationState.Opened)) {
+                this.logger.Debug($"DiscoveryHost CommunicationState is {discoveryHost.Status()}");
+                this.logger.Debug($"ClientHost CommunicationState is {clientHost.Status()}");
+                this.logger.Success($"Initialized Master successfully");
+            } else {
+                this.logger.Error("System can't start the Server. [bold red]Shutdown the Application...[/]");
+                this.logger.Debug($"DiscoveryHost CommunicationState is {discoveryHost.Status()}");
+                this.logger.Debug($"ClientHost CommunicationState is {clientHost.Status()}");
                 Console.ReadLine();
                 Environment.Exit(100);
             }
-
-            // TODO: Check if start is successfully
-
-            logger.Success($"Initialized Master successfully");
         }
 
         private void SetupWorkerDiscovery(EndpointAddress endpointAddress) {
-            GlobalState.GetInstance().ServerState = ServerState.MASTER;
-            InvokeServerDiscovery.InvokeDiscoveryService(endpointAddress);
+            GlobalState.GetInstance().ServerState = ServerState.WORKER;
+            var serverDiscovery = new InvokeServerDiscovery();
+            serverDiscovery.Connect(endpointAddress);
 
-            logger.Success($"Initialized Worker successfully");
+            this.logger.Success($"Initialized Worker successfully");
         }
     }
 }

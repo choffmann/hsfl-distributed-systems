@@ -61,11 +61,10 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         public void PrintDiscoveryMetadata(EndpointDiscoveryMetadata endpointDiscoveryMetadata, string verb) {
             logger.Info($"[bold]{verb}[/] service of the following type from cache.");
             foreach (XmlQualifiedName contractName in endpointDiscoveryMetadata.ContractTypeNames) {
-                logger.Info($"{contractName}");
+                logger.Debug($"Contract Name: {contractName}");
                 break;
             }
             logger.Success("Operation Completed");
-
         }
 
         sealed class OnOnlineAnnouncementAsyncResult : AsyncResult {

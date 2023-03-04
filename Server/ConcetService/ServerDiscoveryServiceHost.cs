@@ -11,64 +11,61 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ServerDiscoveryServiceHost {
-        private ILogger logger = Logger.Instance;
-        private Uri baseAddress;
-        private Uri announcementEndpointAddress;
-        private ServiceHost serviceHost;
+        private readonly ILogger logger = Logger.Instance;
+        private readonly Uri baseAddress;
+        private readonly Uri announcementEndpointAddress;
+        private readonly ServiceHost serviceHost;
 
         public ServerDiscoveryServiceHost() {
-            this.baseAddress = new Uri($"net.tcp://{Environment.MachineName}:9002/ServerDiscoveryService/" + GlobalState.GetInstance().ServerId);
+            this.baseAddress = new Uri($"net.tcp://{Environment.MachineName}:9002/ServerDiscoveryService/{GlobalState.GetInstance().ServerId}");
             this.announcementEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:9021/Announcement");
             this.serviceHost = new ServiceHost(typeof(ServerDiscoveryService), baseAddress);
         }
 
         public void Start() {
-            logger.Info("Starting Server Discovery Host...");
+            this.logger.Info("Starting Server Discovery Host...");
             try {
                 // Set Behavior
-                ServiceMetadataBehavior smb = serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
-                if (smb == null) {
-                    smb = new ServiceMetadataBehavior();
-                }
+                var smb = this.serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>() ?? new ServiceMetadataBehavior();
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-                serviceHost.Description.Behaviors.Add(smb);
-                serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
+                this.serviceHost.Description.Behaviors.Add(smb);
+                this.serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
 
-                ServiceEndpoint netTcpEndpoint = serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService),
+                var netTcpEndpoint = this.serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService),
                     new NetTcpBinding(), string.Empty);
 
                 // Create an announcement endpoint, which points to the Announcement Endpoint hosted by the proxy service.
-                AnnouncementEndpoint announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(),
+                var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(),
                     new EndpointAddress(announcementEndpointAddress));
 
-                ServiceDiscoveryBehavior serviceDiscoveryBehavior = new ServiceDiscoveryBehavior();
+                var serviceDiscoveryBehavior = new ServiceDiscoveryBehavior();
                 serviceDiscoveryBehavior.AnnouncementEndpoints.Add(announcementEndpoint);
 
                 // Make the service discoverable
-                serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
+                this.serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
 
-                serviceHost.Open();
+                this.serviceHost.Open();
 
-                logger.Info($"Discovery Service started at {baseAddress}");
+                this.logger.Info($"Discovery Service started at {baseAddress}");
 
             } catch (CommunicationException e) {
-                logger.Exception(e);
-                logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                this.logger.Exception(e);
+                this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             } catch (TimeoutException e) {
-                logger.Exception(e);
-                logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                this.logger.Exception(e);
+                this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             }
         }
 
         public CommunicationState Status() {
-            return serviceHost.State;
+            return this.serviceHost.State;
         }
 
         public void Stop() {
-            if (serviceHost.State != CommunicationState.Closed) {
-                logger.Info("Aborting the Discovery service...");
-                serviceHost.Abort();
-            }
+            if (this.serviceHost.State == CommunicationState.Closed)
+                return;
+            this.logger.Info("Aborting the Discovery service...");
+            this.serviceHost.Abort();
         }
     }
 }
