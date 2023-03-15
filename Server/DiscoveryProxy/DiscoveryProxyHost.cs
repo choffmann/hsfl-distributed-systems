@@ -40,12 +40,5 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
                 this.logger.Exception(e);
             }
         }
-
-        public void Stop() {
-            if (this.proxyServiceHost.State == CommunicationState.Closed)
-                return;
-            this.logger.Info("Aborting the Proxy service...");
-            this.proxyServiceHost.Abort();
-        }
     }
 }

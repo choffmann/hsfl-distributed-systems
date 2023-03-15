@@ -12,10 +12,10 @@ using hsfl.ceho5518.vs.server.ConcreatService;
 
 namespace hsfl.ceho5518.vs.Client.Services {
     public class DiscoveryMaster {
-        private ILogger logger = Logger.Instance;
-        Uri probeEndpointAddress;
-        DiscoveryEndpoint discoveryEndpoint;
-        DiscoveryClient discoveryClient;
+        private readonly ILogger logger = Logger.Instance;
+        private readonly Uri probeEndpointAddress;
+        private readonly DiscoveryEndpoint discoveryEndpoint;
+        private readonly DiscoveryClient discoveryClient;
 
         public DiscoveryMaster(Uri probeEndpointAddress) {
             this.probeEndpointAddress = probeEndpointAddress;
@@ -26,14 +26,21 @@ namespace hsfl.ceho5518.vs.Client.Services {
         public void SetupProxy() {
             AnsiConsole.Status().Spinner(Spinner.Known.BouncingBar).Start("[yellow]Try to find Master in Network[/]", ctx => {
                 try {
-                    var findResponse = discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
-                    logger.Info("Found the [bold]Master[/] in network");
+                    var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
+                    this.logger.Info("Found the [bold]Master[/] in network");
                     ctx.Status("[yellow]Connecting to Master...[/]");
-                    //SetupWorkerDiscovery(findResponse.Endpoints[0].Address);
+                    SetupClient(findResponse.Endpoints[0].Address);
                 } catch (TargetInvocationException) {
-                    logger.Error("[bold]No Master found in Network.[/]");
+                    this.logger.Error("[bold]No Master found in Network.[/]");
                 }
             });
         }
+        private void SetupClient(EndpointAddress endpointAddress) {
+            var invokeService = new InvokeClientDiscovery();
+            invokeService.Connect(endpointAddress);
+            
+            this.logger.Success("Client initialization successful");
+        }
+        
     }
 }

@@ -72,7 +72,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             var serverDiscovery = new InvokeServerDiscovery();
             serverDiscovery.Connect(endpointAddress);
             
-            this.logger.Success($"Initialized Worker successfully");
+            this.logger.Success($"Worker initialization successful");
         }
     }
 }

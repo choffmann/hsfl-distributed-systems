@@ -10,13 +10,17 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
     [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ClientDiscovery")]
     public interface IClientDiscoveryService {
         [OperationContract]
-        void Connect(string message);
+        void Connect(string clientId);
     }
 
     public class ClientDiscoveryService : IClientDiscoveryService {
         private readonly ILogger logger = Logger.Instance;
-        public void Connect(string message) {
-            this.logger.Info($"Client with id {message} connected to the system");
+        public void Connect(string clientId) {
+            this.logger.Info($"Client {clientId} connected to system");
         }
+    }
+
+    public interface IClientDiscoveryServiceCallback {
+        
     }
 }

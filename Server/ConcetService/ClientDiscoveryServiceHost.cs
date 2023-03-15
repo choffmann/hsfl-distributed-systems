@@ -15,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         public ClientDiscoveryServiceHost() {
             this.baseAddress = new Uri($"net.tcp://{Environment.MachineName}:9002/ClientDiscoveryService/" + GlobalState.GetInstance().ServerId);
             this.announcementEndpointAddress = new Uri($"net.tcp://{Environment.MachineName}:9021/Announcement");
-            this.serviceHost = new ServiceHost(typeof(ServerDiscoveryService), baseAddress);
+            this.serviceHost = new ServiceHost(typeof(ClientDiscoveryService), baseAddress);
         }
 
         public void Start() {
@@ -26,7 +26,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
                 this.serviceHost.Description.Behaviors.Add(smb);
                 this.serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
-                this.serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService), new NetTcpBinding(), string.Empty);
+                this.serviceHost.AddServiceEndpoint(typeof(IClientDiscoveryService), new NetTcpBinding(), string.Empty);
 
                 // Create an announcement endpoint, which points to the Announcement Endpoint hosted by the proxy service.
                 var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(), new EndpointAddress(this.announcementEndpointAddress));
