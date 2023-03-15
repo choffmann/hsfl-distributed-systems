@@ -71,7 +71,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             GlobalState.GetInstance().ServerState = ServerState.WORKER;
             var serverDiscovery = new InvokeServerDiscovery();
             serverDiscovery.Connect(endpointAddress);
-
+            
             this.logger.Success($"Initialized Worker successfully");
         }
     }

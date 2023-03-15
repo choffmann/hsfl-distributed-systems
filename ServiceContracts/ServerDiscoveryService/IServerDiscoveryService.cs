@@ -6,20 +6,27 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using hsfl.ceho5518.vs.ServiceContracts;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
-    [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ServerDiscovery", CallbackContract = typeof(IServerDiscoveryServiceCallback))]
+    [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ServerDiscovery",
+        CallbackContract = typeof(IServerDiscoveryServiceCallback))]
     public interface IServerDiscoveryService {
         [OperationContract]
-        void Connect(string message);
+        void Connect(string workerId);
 
         [OperationContract(IsOneWay = true)]
         void Broadcast(string message);
+
+        [OperationContract]
+        void GetStatus();
+
+        [OperationContract(IsOneWay = true)]
+        void SayGoodbye(string workerId);
     }
 
     public class ServerDiscoveryService : IServerDiscoveryService {
         private readonly ILogger logger = Logger.Instance;
-        //private List<IServerDiscoveryServiceCallback> workers = new List<IServerDiscoveryServiceCallback>();
         private readonly Dictionary<string, IServerDiscoveryServiceCallback> workers = new Dictionary<string, IServerDiscoveryServiceCallback>();
         public void Connect(string workerId) {
             this.logger.Info($"New Worker with id {workerId} connected to the system");
@@ -28,23 +35,25 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 this.logger.Debug($"Save Worker with id {workerId} in dictionary.");
                 this.workers.Add(workerId, callback);
             }
-
-            if (this.workers.Count == 1) {
-                Timer timer = new Timer();
-                timer.Interval = 5000;
-                timer.Elapsed += (sender, args) => {
-                    Broadcast($"Neuer Aufruf: {DateTime.Now}");
-                };
-                timer.AutoReset = true;
-                timer.Enabled = true;
-            }
-            
         }
-        
+
         public void Broadcast(string message) {
             foreach (var worker in this.workers) {
                 worker.Value.OnMessage(message);
                 this.logger.Info($"Send message to Worker with id {worker.Key}");
+            }
+        }
+        public void GetStatus() {
+            foreach (var worker in this.workers) {
+                var status = worker.Value.ReportStatus();
+                this.logger.Debug($"Status from worker: {worker.Key}");
+                this.logger.Debug($"-> {status}");
+            }
+        }
+        public void SayGoodbye(string workerId) {
+            bool removeSuccess = this.workers.Remove(workerId);
+            if (removeSuccess) {
+                this.logger.Info($"Worker {workerId} logged out :waving_hand:");
             }
         }
     }
@@ -52,5 +61,8 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
     public interface IServerDiscoveryServiceCallback {
         [OperationContract(IsOneWay = true)]
         void OnMessage(string message);
+        
+        [OperationContract]
+        ServerStatus ReportStatus();
     }
 }

@@ -17,12 +17,12 @@ using hsfl.ceho5518.vs.server.ConcreatService;
 using System.IO;
 using System.Diagnostics;
 using System.Timers;
+using hsfl.ceho5518.vs.ServiceContracts;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {
         private static ILogger logger = Logger.Instance;
         static void Main(string[] args) {
-            
             StartUp();
             SetupDiscovery();
             // Load Plugins
@@ -32,7 +32,10 @@ namespace hsfl.ceho5518.vs.server {
             logger.SuccessEmoji("Initialization of System successfully");
             logger.Info("Waiting for a job...");
 
+            GlobalState.GetInstance().ServerStatus = ServerStatus.IDLE;
+            
             Console.ReadLine();
+            OnExit();
         }
 
         private static void StartUp() {
@@ -44,10 +47,10 @@ namespace hsfl.ceho5518.vs.server {
             AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
                 .Start(
-                $"[yellow]Starting Server...[/]", ctx => {
-                    CreateAppDataFolder();
-                    Thread.Sleep(2000);
-                });
+                    $"[yellow]Starting Server...[/]", ctx => {
+                        CreateAppDataFolder();
+                        Thread.Sleep(2000);
+                    });
         }
 
         private static void CreateAppDataFolder() {
@@ -68,8 +71,15 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void LoadPlugins() {
-            PluginService pluginService = new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
+            PluginService pluginService =
+                new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
             //PluginService pluginService = new PluginService();
+        }
+
+        private static void OnExit() {
+            GlobalState.GetInstance().ServiceProxy.SayGoodbye(
+                GlobalState.GetInstance().ServerId.ToString()
+            );
         }
     }
 }
