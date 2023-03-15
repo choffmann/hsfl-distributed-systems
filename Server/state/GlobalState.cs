@@ -6,6 +6,7 @@ using System.Linq;
 using System.ServiceModel.Dispatcher;
 using System.Text;
 using System.Threading.Tasks;
+using hsfl.ceho5518.vs.server.ConcreatService;
 using hsfl.ceho5518.vs.ServiceContracts;
 
 namespace hsfl.ceho5518.vs.server.Sate {
@@ -17,6 +18,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
             "ceho5518", "distributed-systems");
         public ConcreatService.IServerDiscoveryService ServiceProxy { get; set; }
         public ServerStatus ServerStatus { get; set; } = ServerStatus.STARTING;
+
         // Debug things...
         public bool ClearAllOnStart { get; set; } = false;
 

@@ -11,26 +11,36 @@ using System.Reflection;
 using hsfl.ceho5518.vs.server.ConcreatService;
 
 namespace hsfl.ceho5518.vs.Client.Services {
-    public class DiscoveryMaster {
-        private readonly ILogger logger = Logger.Instance;
-        private readonly Uri probeEndpointAddress;
-        private readonly DiscoveryEndpoint discoveryEndpoint;
-        private readonly DiscoveryClient discoveryClient;
+    public interface IDiscoveryMaster {
+        Uri ProbeEndpointAddress { get; set; }
+        void SetupProxy();
+    }
 
-        public DiscoveryMaster(Uri probeEndpointAddress) {
-            this.probeEndpointAddress = probeEndpointAddress;
-            this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.probeEndpointAddress));
+    public class DiscoveryMaster : IDiscoveryMaster {
+        private readonly ILogger logger = Logger.Instance;
+        private DiscoveryEndpoint discoveryEndpoint;
+        private DiscoveryClient discoveryClient;
+        public Uri ProbeEndpointAddress { get; set; }
+
+
+        /*public DiscoveryMaster() {
+            var probeEndpointAddress = this.ProbeEndpointAddress;
+            if (probeEndpointAddress != null)
+                this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));
             this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
-        }
+        }*/
 
         public void SetupProxy() {
             AnsiConsole.Status().Spinner(Spinner.Known.BouncingBar).Start("[yellow]Try to find Master in Network[/]", ctx => {
                 try {
+                    this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.ProbeEndpointAddress));
+                    this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
                     var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
                     this.logger.Info("Found the [bold]Master[/] in network");
                     ctx.Status("[yellow]Connecting to Master...[/]");
                     SetupClient(findResponse.Endpoints[0].Address);
-                } catch (TargetInvocationException) {
+                }
+                catch (TargetInvocationException) {
                     this.logger.Error("[bold]No Master found in Network.[/]");
                 }
             });
@@ -38,9 +48,8 @@ namespace hsfl.ceho5518.vs.Client.Services {
         private void SetupClient(EndpointAddress endpointAddress) {
             var invokeService = new InvokeClientDiscovery();
             invokeService.Connect(endpointAddress);
-            
+
             this.logger.Success("Client initialization successful");
         }
-        
     }
 }
