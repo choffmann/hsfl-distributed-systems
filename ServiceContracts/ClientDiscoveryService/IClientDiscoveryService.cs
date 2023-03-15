@@ -23,6 +23,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
             this.logger.Info($"Client {clientId} connected to system");
         }
         public Dictionary<string, ServerStatus> GetServerStatus() {
+            this.logger.Debug("Get status from workers...");
             var response = new Dictionary<string, ServerStatus>();
             foreach (var worker in ServiceState.GetInstance().Workers) {
                 var status = worker.Value.ReportStatus();

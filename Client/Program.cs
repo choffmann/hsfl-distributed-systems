@@ -19,17 +19,19 @@ namespace hsfl.ceho5518.vs.Client {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             // Set LogLevel
             Logger.Instance.LogLevel = LogLevel.Info;
-            
+
             // DI
             var registrations = new ServiceCollection();
-            registrations.AddSingleton<IClientDiscoveryService, ClientDiscoveryService>();
+            registrations.AddSingleton<IInvokeClientDiscovery, InvokeClientDiscovery>();
             registrations.AddSingleton<IDiscoveryMaster, DiscoveryMaster>();
             var registrar = new TypeRegistrar(registrations);
-            
+
             var app = new CommandApp(registrar);
             app.Configure(config => {
                 config.SetApplicationVersion("v0.1");
-                
+                config.SetExceptionHandler(ex => {
+                    Logger.Instance.Exception(ex);
+                });
                 config.AddCommand<StatusCommand>("status")
                     .WithAlias("ps")
                     .WithDescription("Display server status");

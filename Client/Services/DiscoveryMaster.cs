@@ -13,7 +13,7 @@ using hsfl.ceho5518.vs.server.ConcreatService;
 namespace hsfl.ceho5518.vs.Client.Services {
     public interface IDiscoveryMaster {
         Uri ProbeEndpointAddress { get; set; }
-        void SetupProxy();
+        EndpointAddress SetupProxy();
     }
 
     public class DiscoveryMaster : IDiscoveryMaster {
@@ -29,27 +29,18 @@ namespace hsfl.ceho5518.vs.Client.Services {
                 this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(probeEndpointAddress));
             this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
         }*/
-
-        public void SetupProxy() {
-            AnsiConsole.Status().Spinner(Spinner.Known.BouncingBar).Start("[yellow]Try to find Master in Network[/]", ctx => {
-                try {
-                    this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.ProbeEndpointAddress));
-                    this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
-                    var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
-                    this.logger.Info("Found the [bold]Master[/] in network");
-                    ctx.Status("[yellow]Connecting to Master...[/]");
-                    SetupClient(findResponse.Endpoints[0].Address);
-                }
-                catch (TargetInvocationException) {
-                    this.logger.Error("[bold]No Master found in Network.[/]");
-                }
-            });
-        }
-        private void SetupClient(EndpointAddress endpointAddress) {
-            var invokeService = new InvokeClientDiscovery();
-            invokeService.Connect(endpointAddress);
-
-            this.logger.Success("Client initialization successful");
+        public EndpointAddress SetupProxy() {
+            try {
+                this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.ProbeEndpointAddress));
+                this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
+                var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
+                this.logger.Info("Found the [bold]Master[/] in network");
+                return findResponse.Endpoints[0].Address;
+            }
+            catch (TargetInvocationException) {
+                this.logger.Error("[bold]No Master found in Network.[/]");
+                throw new Exception("Unable to connect to master system");
+            }
         }
     }
 }

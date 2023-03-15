@@ -80,11 +80,11 @@
     <Compile Include="Commands\StatusCommand.cs" />
     <Compile Include="Injections\TypeRegistrar.cs" />
     <Compile Include="Injections\TypeResolver.cs" />
-    <Compile Include="InvokeClientDiscovery.cs" />
     <Compile Include="Logger\NoLogger.cs" />
     <Compile Include="Services\DiscoveryMaster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\InvokeClientDiscovery.cs" />
     <Compile Include="State\ClientState.cs" />
   </ItemGroup>
   <ItemGroup>
