@@ -34,7 +34,6 @@ namespace hsfl.ceho5518.vs.Client.Services {
                 this.discoveryEndpoint = new DiscoveryEndpoint(new NetTcpBinding(), new EndpointAddress(this.ProbeEndpointAddress));
                 this.discoveryClient = new DiscoveryClient(this.discoveryEndpoint);
                 var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IClientDiscoveryService)));
-                this.logger.Info("Found the [bold]Master[/] in network");
                 return findResponse.Endpoints[0].Address;
             }
             catch (TargetInvocationException) {

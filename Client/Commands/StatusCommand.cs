@@ -15,9 +15,11 @@ namespace hsfl.ceho5518.vs.Client.Commands {
     public sealed class StatusCommand : Command<StatusCommand.Settings> {
         private readonly IDiscoveryMaster _discovery;
         private readonly IInvokeClientDiscovery _invokeClient;
+        private ILogger logger;
+
         public sealed class Settings : CommandSettings {
             [Description("Enable verbose mode")]
-            [CommandOption("--verbose")]
+            [CommandOption("-v|--verbose")]
             [DefaultValue(false)]
             public bool VerboseMode { get; set; }
         }
@@ -28,22 +30,27 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         }
 
         public override int Execute(CommandContext context, Settings settings) {
-            ILogger logger;
-            if (settings.VerboseMode) logger = Logger.Instance;
-            else logger = new NoLogger();
+            if (settings.VerboseMode)
+                this.logger = Logger.Instance;
+            else
+                this.logger = new NoLogger();
 
             Setup();
             PrintStatusTable();
-            
+
             return 0;
         }
 
 
         private void Setup() {
+            this.logger.Info("Setup Connection to Master");
             this._discovery.ProbeEndpointAddress = new Uri("net.tcp://localhost:8001/Probe");
             var endpointAddress = this._discovery.SetupProxy();
             this._invokeClient.Setup(endpointAddress);
+            this.logger.Info("Connection to Master");
             this._invokeClient.Connect();
+            
+            this.logger.Success("Connection to Master successful");
         }
 
 
@@ -58,7 +65,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
                 string worker = server.IsWorker ? "WORKER" : "MASTER";
                 table.AddRow(worker, server.CurrentState.ToString(), server.Id);
             }
-            
+
             AnsiConsole.Write(table);
         }
     }
