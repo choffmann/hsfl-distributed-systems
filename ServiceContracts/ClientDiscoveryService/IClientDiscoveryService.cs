@@ -1,6 +1,7 @@
 ﻿using hsfl.ceho5518.vs.LoggerService;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -14,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         void Connect(string clientId);
 
         [OperationContract]
-        Dictionary<string, ServerStatus> GetServerStatus();
+        List<ServerStatusDetail> GetServerStatus();
     }
 
     public class ClientDiscoveryService : IClientDiscoveryService {
@@ -22,18 +23,39 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         public void Connect(string clientId) {
             this.logger.Info($"Client {clientId} connected to system");
         }
-        public Dictionary<string, ServerStatus> GetServerStatus() {
-            this.logger.Debug("Get status from workers...");
-            var response = new Dictionary<string, ServerStatus>();
+        public List<ServerStatusDetail> GetServerStatus() {
+            var response = new List<ServerStatusDetail>();
+            var masterStatus = new ServerStatusDetail {
+                CurrentState = ServiceState.GetInstance().CurrentState,
+                Id = ServiceState.GetInstance().CurrentId,
+                IsWorker = false
+            };
+
+            response.Add(masterStatus);
+            
             foreach (var worker in ServiceState.GetInstance().Workers) {
-                var status = worker.Value.ReportStatus();
-                response.Add(worker.Key, status);
+                try {
+                    var status = worker.Value.ReportStatus();
+                    var workerStatus = new ServerStatusDetail {
+                        CurrentState = status,
+                        Id = worker.Key,
+                        IsWorker = true
+                    };
+                    response.Add(workerStatus);
+                }
+                catch (Exception e) {
+                    this.logger.Warning($"Error while calling worker {worker.Key}");
+                    var workerStatus = new ServerStatusDetail {
+                        CurrentState = ServerStatus.ERROR,
+                        Id = worker.Key,
+                        IsWorker = true
+                    };
+                    response.Add(workerStatus);
+                }
             }
             return response;
         }
     }
 
-    public interface IClientDiscoveryServiceCallback {
-        
-    }
+    public interface IClientDiscoveryServiceCallback { }
 }

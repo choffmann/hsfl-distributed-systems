@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.InteropServices;
@@ -6,6 +7,8 @@ using hsfl.ceho5518.vs.Client.Services;
 using hsfl.ceho5518.vs.Client.State;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.ConcreatService;
+using hsfl.ceho5518.vs.ServiceContracts;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace hsfl.ceho5518.vs.Client.Commands {
@@ -30,7 +33,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             else logger = new NoLogger();
 
             Setup();
-            GetStatus();
+            PrintStatusTable();
             
             return 0;
         }
@@ -42,12 +45,21 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             this._invokeClient.Setup(endpointAddress);
             this._invokeClient.Connect();
         }
-        
-        private void GetStatus() {
+
+
+        private void PrintStatusTable() {
             var status = this._invokeClient.GetServerStatus();
-            foreach (var value in status) {
-                Logger.Instance.Info($"{value.Key} -> {value.Value}");
+            var table = new Table();
+            table.AddColumn("Role");
+            table.AddColumn("Status");
+            table.AddColumn("Server ID");
+
+            foreach (var server in status) {
+                string worker = server.IsWorker ? "WORKER" : "MASTER";
+                table.AddRow(worker, server.CurrentState.ToString(), server.Id);
             }
+            
+            AnsiConsole.Write(table);
         }
     }
 }

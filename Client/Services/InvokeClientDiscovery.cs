@@ -10,7 +10,7 @@ namespace hsfl.ceho5518.vs.Client {
     public interface IInvokeClientDiscovery {
         void Setup(EndpointAddress endpointAddress);
         void Connect();
-        Dictionary<string, ServerStatus> GetServerStatus();
+        List<ServerStatusDetail> GetServerStatus();
     }
     
     public class InvokeClientDiscovery : IInvokeClientDiscovery, IClientDiscoveryServiceCallback {
@@ -28,7 +28,7 @@ namespace hsfl.ceho5518.vs.Client {
         public void Connect() {
             this.serviceProxy.Connect("123-456-789");
         }
-        public Dictionary<string, ServerStatus> GetServerStatus() {
+        public List<ServerStatusDetail> GetServerStatus() {
             return this.serviceProxy.GetServerStatus();
         }
     }
