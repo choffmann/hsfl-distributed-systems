@@ -17,20 +17,21 @@ namespace hsfl.ceho5518.vs.Client {
         static int Main(string[] args) {
             // Set Text to UTF-8 to use Emojis and Spinners
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            // Set LogLevel
-            Logger.Instance.LogLevel = LogLevel.Info;
 
             // DI
             var registrations = new ServiceCollection();
             registrations.AddSingleton<IInvokeClientDiscovery, InvokeClientDiscovery>();
             registrations.AddSingleton<IDiscoveryMaster, DiscoveryMaster>();
+            registrations.AddSingleton<ILogger, Logger>();
+            registrations.AddSingleton<ILogger, NoLogger>();
+            registrations.AddSingleton<IConnector, Connector>();
             var registrar = new TypeRegistrar(registrations);
 
             var app = new CommandApp(registrar);
             app.Configure(config => {
                 config.SetApplicationVersion("v0.1");
                 config.SetExceptionHandler(ex => {
-                    Logger.Instance.Exception(ex);
+                    AnsiConsole.WriteException(ex);
                 });
                 config.AddCommand<StatusCommand>("status")
                     .WithAlias("ps")

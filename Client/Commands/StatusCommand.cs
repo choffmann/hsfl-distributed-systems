@@ -7,8 +7,8 @@ using Spectre.Console.Cli;
 
 namespace hsfl.ceho5518.vs.Client.Commands {
     public sealed class StatusCommand : Command<StatusCommand.Settings> {
-        private readonly IDiscoveryMaster _discovery;
         private readonly IInvokeClientDiscovery _invokeClient;
+        private readonly IConnector _connector;
         private ILogger logger;
 
         public sealed class Settings : CommandSettings {
@@ -17,9 +17,9 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             [DefaultValue(false)]
             public bool VerboseMode { get; set; }
         }
-
-        public StatusCommand(IDiscoveryMaster discovery, IInvokeClientDiscovery invokeClient) {
-            this._discovery = discovery ?? throw new ArgumentNullException(nameof(discovery));
+        
+        public StatusCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
+            this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
             this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
         }
 
@@ -29,25 +29,12 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             else
                 this.logger = new NoLogger();
 
-            Setup();
+            this._connector.Setup();
             PrintStatusTable();
 
             return 0;
         }
-
-
-        private void Setup() {
-            this.logger.Info("Setup Connection to Master");
-            this._discovery.ProbeEndpointAddress = new Uri("net.tcp://localhost:8001/Probe");
-            var endpointAddress = this._discovery.SetupProxy();
-            this._invokeClient.Setup(endpointAddress);
-            this.logger.Info("Connection to Master");
-            this._invokeClient.Connect();
-            
-            this.logger.Success("Connection to Master successful");
-        }
-
-
+        
         private void PrintStatusTable() {
             var status = this._invokeClient.GetServerStatus();
             var table = new Table();
