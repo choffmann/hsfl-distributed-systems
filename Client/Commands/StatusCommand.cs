@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using hsfl.ceho5518.vs.Client.Logger;
 using hsfl.ceho5518.vs.Client.Services;
 using hsfl.ceho5518.vs.LoggerService;
 using Spectre.Console;
@@ -11,24 +12,16 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         private readonly IConnector _connector;
         private ILogger logger;
 
-        public sealed class Settings : CommandSettings {
-            [Description("Enable verbose mode")]
-            [CommandOption("-v|--verbose")]
-            [DefaultValue(false)]
-            public bool VerboseMode { get; set; }
+        public sealed class Settings : DefaultSettings {
         }
-        
+
         public StatusCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
             this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
             this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
+            this.logger = ClientLogger.Logger;
         }
 
         public override int Execute(CommandContext context, Settings settings) {
-            if (settings.VerboseMode)
-                this.logger = Logger.Instance;
-            else
-                this.logger = new NoLogger();
-
             this._connector.Setup();
             PrintStatusTable();
 

@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace hsfl.ceho5518.vs.LoggerService {
     public enum LogLevel {
-        Debug, Info, Success, Warning, Error
+        None, Debug, Info, Success, Warning, Error
     }
 }

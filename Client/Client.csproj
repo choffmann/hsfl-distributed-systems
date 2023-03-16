@@ -77,10 +77,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DefaultSettings.cs" />
     <Compile Include="Commands\PluginCommand.cs" />
     <Compile Include="Commands\StatusCommand.cs" />
     <Compile Include="Injections\TypeRegistrar.cs" />
     <Compile Include="Injections\TypeResolver.cs" />
+    <Compile Include="Logger\ClientLogger.cs" />
     <Compile Include="Logger\NoLogger.cs" />
     <Compile Include="Services\Connector.cs" />
     <Compile Include="Services\DiscoveryMaster.cs" />

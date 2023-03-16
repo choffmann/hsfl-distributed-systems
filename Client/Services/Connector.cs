@@ -1,4 +1,5 @@
 ﻿using System;
+using hsfl.ceho5518.vs.Client.Logger;
 using hsfl.ceho5518.vs.LoggerService;
 
 namespace hsfl.ceho5518.vs.Client.Services {
@@ -12,10 +13,10 @@ namespace hsfl.ceho5518.vs.Client.Services {
         private readonly IInvokeClientDiscovery _invokeClient;
         private readonly ILogger logger;
         
-        public Connector(IDiscoveryMaster discovery, IInvokeClientDiscovery invoker, ILogger logger) {
+        public Connector(IDiscoveryMaster discovery, IInvokeClientDiscovery invoker) {
             this._discovery = discovery ?? throw new ArgumentNullException(nameof(discovery));
             this._invokeClient = invoker ?? throw new ArgumentNullException(nameof(invoker));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));;
+            this.logger = ClientLogger.Logger;
         }
         
         public void Setup() {

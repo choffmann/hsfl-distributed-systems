@@ -12,7 +12,6 @@ namespace hsfl.ceho5518.vs.Client {
     }
     
     public class InvokeClientDiscovery : IInvokeClientDiscovery, IClientDiscoveryServiceCallback {
-        private readonly ILogger logger = Logger.Instance;
         private IClientDiscoveryService serviceProxy;
 
         //private DuplexChannelFactory<IClientDiscoveryService> channelFactory;

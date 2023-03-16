@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using hsfl.ceho5518.vs.Client.Injections;
+using hsfl.ceho5518.vs.Client.Logger;
 
 namespace hsfl.ceho5518.vs.Client {
     internal class Program {
@@ -22,17 +23,16 @@ namespace hsfl.ceho5518.vs.Client {
             var registrations = new ServiceCollection();
             registrations.AddSingleton<IInvokeClientDiscovery, InvokeClientDiscovery>();
             registrations.AddSingleton<IDiscoveryMaster, DiscoveryMaster>();
-            registrations.AddSingleton<ILogger, Logger>();
-            registrations.AddSingleton<ILogger, NoLogger>();
             registrations.AddSingleton<IConnector, Connector>();
             var registrar = new TypeRegistrar(registrations);
-
             var app = new CommandApp(registrar);
             app.Configure(config => {
                 config.SetApplicationVersion("v0.1");
+                config.SetInterceptor(new LogInterceptor());
                 config.SetExceptionHandler(ex => {
                     AnsiConsole.WriteException(ex);
                 });
+                
                 config.AddCommand<StatusCommand>("status")
                     .WithAlias("ps")
                     .WithDescription("Display server status");
