@@ -65,6 +65,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             }
 
             AnsiConsole.Write(table);
+            AnsiConsole.MarkupLine($"Total plugin loaded: {status.Count}");
         }
     }
 }

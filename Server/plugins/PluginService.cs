@@ -10,8 +10,8 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using hsfl.ceho5518.vs.ServiceContracts.Model;
-using hsfl.ceho5518.vs.ServiceContracts.Observer;
+using hsfl.ceho5518.vs.server.ServiceContracts.Model;
+using hsfl.ceho5518.vs.server.ServiceContracts.Observer;
 using Plugin = PluginContract.Plugin;
 
 namespace hsfl.ceho5518.vs.server.Plugins {
@@ -157,13 +157,13 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             var assembly = Assembly.LoadFrom(path);
             AddPlugin(assembly);
         }
-        public void OnReportPlugins(PluginObserver plugin) {
-            plugin.PluginStatus = ReportPlugins();
-        }
 
-        private PluginStatus ReportPlugins() {
-            var reportList = this.pluginsList.Select(plugin => new ServiceContracts.Model.Plugin { Name = plugin.Name, Size = 0, Activated = true })
-                .ToList();
+        public PluginStatus ReportPlugins() {
+            var reportList = this.pluginsList.Select(plugin => new ServiceContracts.Model.Plugin {
+                    Name = plugin.Name, 
+                    Size = new FileInfo(this.pluginPath + "\\" + plugin.Name + ".dll").Length, 
+                    Activated = true 
+                }).ToList();
             return new PluginStatus(reportList);
         }
     }

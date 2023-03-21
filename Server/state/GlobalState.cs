@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using hsfl.ceho5518.vs.server.ConcreatService;
-using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts;
 
 namespace hsfl.ceho5518.vs.server.Sate {
     public class GlobalState {
@@ -18,7 +18,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
         public string ServerId { get; } = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "").ToLower();
         public string ApplicationDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "hsfl",
             "ceho5518", "distributed-systems");
-        public ConcreatService.IServerDiscoveryService ServiceProxy { get; set; }
+        public ServiceContracts.ServerDiscoveryService.IServerDiscoveryService ServiceProxy { get; set; }
 
         public ServerStatus ServerStatus {
             get {
