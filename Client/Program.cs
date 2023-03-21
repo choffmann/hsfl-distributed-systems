@@ -30,7 +30,8 @@ namespace hsfl.ceho5518.vs.Client {
                 config.SetApplicationVersion("v0.1");
                 config.SetInterceptor(new LogInterceptor());
                 config.SetExceptionHandler(ex => {
-                    AnsiConsole.WriteException(ex);
+                    //AnsiConsole.WriteException(ex);
+                    AnsiConsole.MarkupLine("[red]Fehler: [/]" + ex.Message);
                 });
                 
                 config.AddCommand<StatusCommand>("status")

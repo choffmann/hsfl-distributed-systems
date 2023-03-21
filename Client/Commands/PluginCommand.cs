@@ -14,7 +14,10 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         private readonly IConnector _connector;
         private ILogger logger;
 
-        public sealed class Settings : CommandSettings { }
+        public sealed class Settings : CommandSettings {
+            [CommandOption("-p|--path <PATH>")]
+            public string PluginPath { get; set; }
+        }
 
         public PluginCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
             this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
@@ -26,8 +29,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             this._connector.Setup();
 
 
-            byte[] assembly = File.ReadAllBytes(
-                @"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug\DemoPlugin.dll");
+            byte[] assembly = File.ReadAllBytes(settings.PluginPath);
             this._invokeClient.UploadPlugin(assembly);
             return 0;
         }
