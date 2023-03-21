@@ -8,6 +8,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.ServiceContracts.Model;
 using hsfl.ceho5518.vs.ServiceContracts.Observer;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
@@ -28,7 +29,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         private PluginObserver _plugin = PluginObserver.GetInstance();
         private readonly ILogger logger = Logger.Instance;
         public void Connect(string clientId) {
-            this.logger.Info($"Client {clientId} connected to system");
+            this.logger.Debug($"Client {clientId} connected to system");
         }
         public List<ServerStatusDetail> GetServerStatus() {
             var response = new List<ServerStatusDetail>();

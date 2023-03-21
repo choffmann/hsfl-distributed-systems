@@ -99,9 +99,9 @@
       <Project>{35d4fff8-14a7-4fee-b721-73ff00e9271c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
-      <Project>{4489d426-fc83-47ab-86ed-0763824a605b}</Project>
-      <Name>ServiceContracts</Name>
+    <ProjectReference Include="..\Server\Server.csproj">
+      <Project>{99766f3d-7208-4d36-9cce-0341dfa0bddd}</Project>
+      <Name>Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

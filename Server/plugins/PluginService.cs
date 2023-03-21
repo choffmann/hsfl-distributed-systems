@@ -1,5 +1,4 @@
 ﻿using hsfl.ceho5518.vs.LoggerService;
-using PluginContract;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,9 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using hsfl.ceho5518.vs.ServiceContracts.Model;
 using hsfl.ceho5518.vs.ServiceContracts.Observer;
+using Plugin = PluginContract.Plugin;
 
 namespace hsfl.ceho5518.vs.server.Plugins {
     public class PluginService : IPluginObserver {
@@ -155,6 +156,15 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             File.WriteAllBytes(path, plugin.Assembly);
             var assembly = Assembly.LoadFrom(path);
             AddPlugin(assembly);
+        }
+        public void OnReportPlugins(PluginObserver plugin) {
+            plugin.PluginStatus = ReportPlugins();
+        }
+
+        private PluginStatus ReportPlugins() {
+            var reportList = this.pluginsList.Select(plugin => new ServiceContracts.Model.Plugin { Name = plugin.Name, Size = 0, Activated = true })
+                .ToList();
+            return new PluginStatus(reportList);
         }
     }
 }

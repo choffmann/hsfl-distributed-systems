@@ -94,6 +94,12 @@
     <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContracts\ClientDiscoveryService\IClientDiscoveryService.cs" />
+    <Compile Include="ServiceContracts\Model\PluginStatus.cs" />
+    <Compile Include="ServiceContracts\Observer\PluginObserver.cs" />
+    <Compile Include="ServiceContracts\ServerDiscoveryService\IServerDiscoveryService.cs" />
+    <Compile Include="ServiceContracts\ServerStatus.cs" />
+    <Compile Include="ServiceContracts\ServiceState.cs" />
     <Compile Include="State\GlobalState.cs" />
     <Compile Include="State\ServerState.cs" />
   </ItemGroup>
@@ -111,10 +117,6 @@
       <Project>{5aeea4a8-508d-4f74-8ae2-625200dd862f}</Project>
       <Name>PluginContract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj">
-      <Project>{4489d426-fc83-47ab-86ed-0763824a605b}</Project>
-      <Name>ServiceContracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -128,6 +130,5 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

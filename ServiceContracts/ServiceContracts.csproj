@@ -42,12 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientDiscoveryService\IClientDiscoveryService.cs" />
-    <Compile Include="Observer\PluginObserver.cs" />
-    <Compile Include="ServiceState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerDiscoveryService\IServerDiscoveryService.cs" />
-    <Compile Include="ServerStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logger\Logger.csproj">
