@@ -15,8 +15,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         private ILogger logger;
 
         public sealed class Settings : CommandSettings {
-            [CommandOption("-p|--path <PATH>")]
-            public string PluginPath { get; set; }
+            
         }
 
         public PluginCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
@@ -26,9 +25,29 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         }
 
         public override int Execute(CommandContext context, Settings settings) {
+            return 0;
+        }
+    }
+
+    public sealed class PluginUploadCommand: Command<PluginUploadCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
+        private readonly IInvokeClientDiscovery _invokeClient;
+        private readonly IConnector _connector;
+        private ILogger logger;
+        public PluginUploadCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
+            this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
+            this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
+            this.logger = ClientLogger.Logger;
+        }
+        
+        public sealed class Settings : CommandSettings {
+            [CommandArgument(0, "<PATH>")]
+            public string PluginPath { get; set; }
+        }
+
+        public override int Execute(CommandContext context, Settings settings) {
             this._connector.Setup();
 
-
+            this.logger.Info("Hello");
             byte[] assembly = File.ReadAllBytes(settings.PluginPath);
             this._invokeClient.UploadPlugin(assembly);
             return 0;

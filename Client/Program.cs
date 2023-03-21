@@ -40,6 +40,7 @@ namespace hsfl.ceho5518.vs.Client {
 
                 config.AddBranch<PluginCommand.Settings>("plugin", plugin => {
                     plugin.AddCommand<PluginStatusCommand>("status");
+                    plugin.AddCommand<PluginUploadCommand>("upload");
                 });
             });
             return app.Run(args);

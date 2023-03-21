@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{35D4FFF8-14A7-4FEE-B721-73FF00E9271C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primfaktorzerlegung", "Primfaktorzerlegung\Primfaktorzerlegung.csproj", "{92085860-79AA-4454-A51B-6C89A0891FB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{35D4FFF8-14A7-4FEE-B721-73FF00E9271C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35D4FFF8-14A7-4FEE-B721-73FF00E9271C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35D4FFF8-14A7-4FEE-B721-73FF00E9271C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92085860-79AA-4454-A51B-6C89A0891FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92085860-79AA-4454-A51B-6C89A0891FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92085860-79AA-4454-A51B-6C89A0891FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92085860-79AA-4454-A51B-6C89A0891FB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5AEEA4A8-508D-4F74-8AE2-625200DD862F} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
 		{DDFC32BE-8578-4CDF-985F-BB89694C7A83} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
+		{92085860-79AA-4454-A51B-6C89A0891FB7} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {554B6106-2BB3-4453-B03F-2661602C61BF}
