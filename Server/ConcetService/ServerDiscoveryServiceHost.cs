@@ -8,9 +8,10 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
 using System.Text;
 using System.Threading.Tasks;
+using hsfl.ceho5518.vs.server.Plugins;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
-    public class ServerDiscoveryServiceHost {
+    public class ServerDiscoveryServiceHost  {
         private readonly ILogger logger = Logger.Instance;
         private readonly Uri baseAddress;
         private readonly Uri announcementEndpointAddress;
@@ -41,10 +42,12 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 this.serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
                 this.serviceHost.Open();
                 this.logger.Info($"Discovery Service started at {baseAddress}");
-            } catch (CommunicationException e) {
+            }
+            catch (CommunicationException e) {
                 this.logger.Exception(e);
                 this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
-            } catch (TimeoutException e) {
+            }
+            catch (TimeoutException e) {
                 this.logger.Exception(e);
                 this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
             }

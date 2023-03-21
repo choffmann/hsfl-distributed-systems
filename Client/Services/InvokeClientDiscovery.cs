@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.ServiceModel;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.ConcreatService;
@@ -9,6 +10,7 @@ namespace hsfl.ceho5518.vs.Client {
         void Setup(EndpointAddress endpointAddress);
         void Connect();
         List<ServerStatusDetail> GetServerStatus();
+        void UploadPlugin(byte[] assembly);
     }
     
     public class InvokeClientDiscovery : IInvokeClientDiscovery, IClientDiscoveryServiceCallback {
@@ -27,6 +29,9 @@ namespace hsfl.ceho5518.vs.Client {
         }
         public List<ServerStatusDetail> GetServerStatus() {
             return this.serviceProxy.GetServerStatus();
+        }
+        public void UploadPlugin(byte[] assembly) {
+            this.serviceProxy.UploadPlugin(assembly);
         }
     }
 }

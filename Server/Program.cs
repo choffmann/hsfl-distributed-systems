@@ -29,7 +29,7 @@ namespace hsfl.ceho5518.vs.server {
             LoadPlugins();
 
             // Initialization done
-            logger.SuccessEmoji("Initialization of System successfully");
+            logger.SuccessEmoji("Initialization of System successful");
             logger.Info("Waiting for a job...");
 
             GlobalState.GetInstance().ServerStatus = ServerStatus.IDLE;
@@ -71,14 +71,14 @@ namespace hsfl.ceho5518.vs.server {
         }
 
         private static void LoadPlugins() {
-            PluginService pluginService =
-                new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
-            //PluginService pluginService = new PluginService();
+            // PluginService pluginService = new PluginService(@"C:\Users\hoffmann\Documents\FH Flensburg\7. Semester\Verteilte Systeme\VS-Hausarbeit\DemoPlugin\bin\Debug");
+            PluginService.GetInstance().Startup();
         }
 
         private static void OnExit() {
+            PluginService.GetInstance().OnStop();
             GlobalState.GetInstance().ServiceProxy.SayGoodbye(
-                GlobalState.GetInstance().ServerId.ToString()
+                GlobalState.GetInstance().ServerId
             );
         }
     }

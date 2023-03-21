@@ -4,6 +4,7 @@ using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
+using hsfl.ceho5518.vs.server.Plugins;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ClientDiscoveryServiceHost {
@@ -54,7 +55,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
 
         public void Stop() {
-            if (this.serviceHost.State == CommunicationState.Closed) 
+            if (this.serviceHost.State == CommunicationState.Closed)
                 return;
             this.logger.Info("Aborting the Client service...");
             this.serviceHost.Abort();

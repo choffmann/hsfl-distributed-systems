@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel.Dispatcher;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using hsfl.ceho5518.vs.server.ConcreatService;
 using hsfl.ceho5518.vs.ServiceContracts;
@@ -14,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
         static GlobalState instance;
         private ServerStatus _serverStatus = ServerStatus.STARTING;
         public ServerState ServerState { get; set; }
-        public Guid ServerId { get; } = Guid.NewGuid();
+        public string ServerId { get; } = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "").ToLower();
         public string ApplicationDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "hsfl",
             "ceho5518", "distributed-systems");
         public ConcreatService.IServerDiscoveryService ServiceProxy { get; set; }

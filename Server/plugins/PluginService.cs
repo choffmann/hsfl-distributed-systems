@@ -6,64 +6,68 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using hsfl.ceho5518.vs.ServiceContracts.Observer;
 
 namespace hsfl.ceho5518.vs.server.Plugins {
-    public class PluginService {
+    public class PluginService : IPluginObserver {
         private readonly ILogger logger = LoggerService.Logger.Instance;
+        static PluginService instance;
         private readonly List<PluginContract.Plugin> pluginsList = new List<PluginContract.Plugin>();
         private readonly string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
 
-        public PluginService() {
-            AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
-            $"Register Plugins...", ctx => {
-                this.logger.Debug($"Plugin path is {this.pluginPath}");
-                // Load Plugins
-                LoadPlugins();
-                ctx.Status("Startup Plugins...");
+        private PluginObserver _pluginObserver = PluginObserver.GetInstance();
 
-                // Run the Startup Lifecycle
-                OnStartup();
-            });
+        private PluginService() {
+            this._pluginObserver.AddObserver(this);
         }
 
-        public PluginService(string pluginPath) {
-            this.pluginPath = pluginPath;
-            AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
-            $"Register Plugins...", ctx => {
-                // Load Plugins
-                LoadPlugins();
-                ctx.Status("Startup Plugins...");
+        public static PluginService GetInstance() {
+            return instance ??= new PluginService();
+        }
 
-                // Run the Startup Lifecycle
-                OnStartup();
-            });
+        public void Startup() {
+            AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
+                $"Register Plugins...", ctx => {
+                    this.logger.Debug($"Plugin path is {this.pluginPath}");
+                    CreatePluginFolder();
+
+                    // Load Plugins
+                    LoadPlugins();
+                    ctx.Status("Startup Plugins...");
+
+                    // Run the Startup Lifecycle
+                    OnStartup();
+                });
         }
 
         private void LoadPlugins() {
             this.logger.Debug($"Load plugins from path: [bold gray]{this.pluginPath}[/]");
             try {
                 string[] dlls = Directory.GetFiles(this.pluginPath, "*.dll");
+                if (dlls.Length == 0) {
+                    this.logger.Info("No Plugins available");
+                    return;
+                }
+
                 foreach (string dll in dlls) {
                     var ass = Assembly.LoadFrom(dll);
-                    var plugins = ass.GetTypes().Where(w => typeof(PluginContract.Plugin).IsAssignableFrom(w));
-                    foreach (var plugin in plugins) {
-                        var activatorPlugin = (Activator.CreateInstance(plugin) as PluginContract.Plugin);
-                        OnInit(activatorPlugin);
-                    }
+                    AddPlugin(ass);
                 }
-            } catch (DirectoryNotFoundException ex) {
-                this.logger.Exception(ex);
-                this.logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
-            } catch (ReflectionTypeLoadException ex) {
-                this.logger.Exception(ex);
-                this.logger.Error($"Failed to load plugins. [bold red]{ex.Message}[/]");
             }
+            catch (DirectoryNotFoundException e) {
+                this.logger.Error($"It seems like the path is incomplete {this.pluginPath}");
+            }
+            catch (ReflectionTypeLoadException ex) {
+                this.logger.Error($"Failed to load plugin.");
+            }
+
             if (LoadedPlugins() > 0) {
-                this.logger.Success($"Successfully load [bold green]{LoadedPlugins()}[/] plugins");
+                this.logger.Success($"Load [bold green]{LoadedPlugins()}[/] plugins");
             } else {
                 this.logger.Info("No plugins loaded");
             }
@@ -72,6 +76,16 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         // Total amount of loaded plugins
         public int LoadedPlugins() {
             return this.pluginsList.Count;
+        }
+
+        public void AddPlugin(Assembly assembly) {
+            if (assembly == null)
+                throw new ArgumentNullException(nameof(assembly));
+            var plugins = assembly.GetTypes().Where(w => typeof(PluginContract.Plugin).IsAssignableFrom(w));
+            foreach (var plugin in plugins) {
+                var activatorPlugin = (Activator.CreateInstance(plugin) as PluginContract.Plugin);
+                OnInit(activatorPlugin);
+            }
         }
 
         public void ReloadPlugins() {
@@ -87,11 +101,12 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 plugin.OnInit();
                 this.logger.Success($"Successfully register plugin {plugin.Name}");
                 this.pluginsList.Add(plugin);
-            } catch(Exception ex) {
-                this.logger.Exception(ex);
-                this.logger.Warning($"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
             }
-            
+            catch (Exception ex) {
+                this.logger.Exception(ex);
+                this.logger.Warning(
+                    $"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
+            }
         }
 
         private void OnStartup() {
@@ -99,8 +114,9 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 try {
                     this.logger.Info($"Start Plugin {plugin.Name}");
                     plugin.OnStartup();
-                    this.logger.Success($"Successfully start plugin [bold springgreen3]{plugin.Name}[/]");
-                } catch (Exception ex) {
+                    this.logger.Success($"Plugin [bold springgreen3]{plugin.Name}[/] started successfully");
+                }
+                catch (Exception ex) {
                     this.logger.Exception(ex);
                     this.logger.Error($"Failed to startup plugin {plugin.Name}. {ex.Message}");
                 }
@@ -114,6 +130,31 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             }
             this.logger.Info("Startup Plugins...");
             this.logger.Success($"Successfully start [bold green]{LoadedPlugins()}[/] plugins");
+        }
+
+        private void CreatePluginFolder() {
+            if (!Directory.Exists(this.pluginPath)) {
+                Directory.CreateDirectory(this.pluginPath);
+            }
+        }
+
+        private string GetNameFromDll(byte[] assemblyBytes) {
+            var assembly = Assembly.Load(assemblyBytes);
+            var plugins = assembly.GetTypes().Where(w => typeof(PluginContract.Plugin).IsAssignableFrom(w));
+            foreach (var plugin in plugins) {
+                var activatorPlugin = (Activator.CreateInstance(plugin) as PluginContract.Plugin);
+                return activatorPlugin.Name;
+            }
+            throw new Exception("Fehler beim laden von neuem Plugin");
+        }
+
+        public void OnPluginUpload(PluginObserver plugin) {
+            string name = GetNameFromDll(plugin.Assembly);
+            this.logger.Debug($"Plugin [grey]{name}[/] wurde vom Client hochgeladen und wird registriert");
+            string path = this.pluginPath + "\\" + name + ".dll";
+            File.WriteAllBytes(path, plugin.Assembly);
+            var assembly = Assembly.LoadFrom(path);
+            AddPlugin(assembly);
         }
     }
 }
