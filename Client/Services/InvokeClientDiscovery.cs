@@ -3,14 +3,13 @@ using System.Reflection;
 using System.ServiceModel;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.ConcreatService;
-using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService;
+using hsfl.ceho5518.vs.server.ServiceContracts.Model;
 
 namespace hsfl.ceho5518.vs.Client {
-    public interface IInvokeClientDiscovery {
+    public interface IInvokeClientDiscovery: IClientDiscoveryService {
         void Setup(EndpointAddress endpointAddress);
-        void Connect();
-        List<ServerStatusDetail> GetServerStatus();
-        void UploadPlugin(byte[] assembly);
     }
     
     public class InvokeClientDiscovery : IInvokeClientDiscovery, IClientDiscoveryServiceCallback {
@@ -24,14 +23,17 @@ namespace hsfl.ceho5518.vs.Client {
             this.serviceProxy = this.channelFactory.CreateChannel();
         }
         
-        public void Connect() {
-            this.serviceProxy.Connect("123-456-789");
+        public void Connect(string clientId) {
+            this.serviceProxy.Connect(clientId);
         }
         public List<ServerStatusDetail> GetServerStatus() {
             return this.serviceProxy.GetServerStatus();
         }
         public void UploadPlugin(byte[] assembly) {
             this.serviceProxy.UploadPlugin(assembly);
+        }
+        public PluginStatus PluginStatus() {
+            return this.serviceProxy.PluginStatus();
         }
     }
 }

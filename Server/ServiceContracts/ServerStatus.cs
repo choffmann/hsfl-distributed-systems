@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace hsfl.ceho5518.vs.ServiceContracts {
+﻿namespace hsfl.ceho5518.vs.server.ServiceContracts {
     public enum ServerStatus {
         STARTING, IDLE, LOADING, WORKING, ERROR
     }

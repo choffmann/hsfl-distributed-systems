@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
 using hsfl.ceho5518.vs.server.Plugins;
+using hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ClientDiscoveryServiceHost {

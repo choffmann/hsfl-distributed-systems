@@ -37,7 +37,9 @@ namespace hsfl.ceho5518.vs.Client {
                     .WithAlias("ps")
                     .WithDescription("Display server status");
 
-                config.AddCommand<PluginCommand>("plugin");
+                config.AddBranch<PluginCommand.Settings>("plugin", plugin => {
+                    plugin.AddCommand<PluginStatusCommand>("status");
+                });
             });
             return app.Run(args);
         }

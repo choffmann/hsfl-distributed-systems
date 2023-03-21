@@ -17,7 +17,7 @@ using hsfl.ceho5518.vs.server.ConcreatService;
 using System.IO;
 using System.Diagnostics;
 using System.Timers;
-using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts;
 
 namespace hsfl.ceho5518.vs.server {
     internal class Program {

@@ -6,17 +6,18 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts;
+using hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class InvokeServerDiscovery : IServerDiscoveryServiceCallback {
         private readonly ILogger logger = Logger.Instance;
-        private DuplexChannelFactory<IServerDiscoveryService> channelFactory;
+        private DuplexChannelFactory<ServiceContracts.ServerDiscoveryService.IServerDiscoveryService> channelFactory;
 
         public void Connect(EndpointAddress endpointAddress) {
             this.logger.Info($"Invoking ServerDiscoveryServiceClient at {endpointAddress.Uri}");
             var instanceContext = new InstanceContext(this);
-            this.channelFactory = new DuplexChannelFactory<IServerDiscoveryService>(instanceContext, new NetTcpBinding(), endpointAddress);
+            this.channelFactory = new DuplexChannelFactory<ServiceContracts.ServerDiscoveryService.IServerDiscoveryService>(instanceContext, new NetTcpBinding(), endpointAddress);
             GlobalState.GetInstance().ServiceProxy = this.channelFactory.CreateChannel();
             GlobalState.GetInstance().ServiceProxy.Connect(GlobalState.GetInstance().ServerId.ToString());
         }

@@ -1,14 +1,8 @@
-﻿using hsfl.ceho5518.vs.LoggerService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using hsfl.ceho5518.vs.ServiceContracts;
+using hsfl.ceho5518.vs.LoggerService;
 
-namespace hsfl.ceho5518.vs.server.ConcreatService {
+namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
     [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ServerDiscovery",
         CallbackContract = typeof(IServerDiscoveryServiceCallback))]
     public interface IServerDiscoveryService {

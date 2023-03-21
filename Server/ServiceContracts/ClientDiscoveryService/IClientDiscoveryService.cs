@@ -1,17 +1,12 @@
-﻿using hsfl.ceho5518.vs.LoggerService;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Reflection;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using hsfl.ceho5518.vs.ServiceContracts;
-using hsfl.ceho5518.vs.ServiceContracts.Model;
-using hsfl.ceho5518.vs.ServiceContracts.Observer;
+using hsfl.ceho5518.vs.LoggerService;
+using hsfl.ceho5518.vs.server.Plugins;
+using hsfl.ceho5518.vs.server.ServiceContracts.Model;
+using hsfl.ceho5518.vs.server.ServiceContracts.Observer;
 
-namespace hsfl.ceho5518.vs.server.ConcreatService {
+namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
     [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ClientDiscovery")]
     public interface IClientDiscoveryService {
         [OperationContract]
@@ -22,6 +17,9 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
 
         [OperationContract(IsOneWay = true)]
         void UploadPlugin(byte[] assembly);
+        
+        [OperationContract]
+        PluginStatus PluginStatus();
     }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
@@ -65,6 +63,9 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
         public void UploadPlugin(byte[] assembly) {
             this._plugin.Assembly = assembly;
+        }
+        public PluginStatus PluginStatus() {
+            return PluginService.GetInstance().ReportPlugins();
         }
     }
 

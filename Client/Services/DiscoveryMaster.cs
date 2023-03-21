@@ -3,6 +3,7 @@ using System.ServiceModel.Discovery;
 using System.ServiceModel;
 using System.Reflection;
 using hsfl.ceho5518.vs.server.ConcreatService;
+using hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService;
 
 namespace hsfl.ceho5518.vs.Client.Services {
     public interface IDiscoveryMaster {

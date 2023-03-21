@@ -25,7 +25,7 @@ namespace hsfl.ceho5518.vs.Client.Services {
             var endpointAddress = this._discovery.SetupProxy();
             this._invokeClient.Setup(endpointAddress);
             this.logger.Info("Connection to Master");
-            this._invokeClient.Connect();
+            this._invokeClient.Connect("123-456-789");
             
             this.logger.Success("Connection to Master successful");
         }

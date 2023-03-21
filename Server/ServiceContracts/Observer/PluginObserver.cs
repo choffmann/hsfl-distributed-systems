@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
-using hsfl.ceho5518.vs.ServiceContracts.Model;
 
-namespace hsfl.ceho5518.vs.ServiceContracts.Observer {
+namespace hsfl.ceho5518.vs.server.ServiceContracts.Observer {
     public interface IPluginObserver {
         void OnPluginUpload(PluginObserver plugin);
-        void OnReportPlugins(PluginObserver plugin);
     }
 
     public class PluginObserver {
         private static PluginObserver instance;
         private List<IPluginObserver> _observers = new List<IPluginObserver>();
         private byte[] _assembly;
-        private PluginStatus _pluginStatus;
 
         public byte[] Assembly {
             get {
@@ -23,21 +19,8 @@ namespace hsfl.ceho5518.vs.ServiceContracts.Observer {
                 NotifyObservers();
             }
         }
-        
-        public PluginStatus PluginStatus {
-            get {
-                return this._pluginStatus;
-            }
-            set {
-                this._pluginStatus = value;
-            }
-        }
 
         private PluginObserver() {
-        }
-
-        public void ReportPluginStatus() {
-            OnReportPlugins();
         }
 
         public static PluginObserver GetInstance() {
@@ -58,12 +41,6 @@ namespace hsfl.ceho5518.vs.ServiceContracts.Observer {
         private void NotifyObservers() {
             foreach (var observer in this._observers) {
                 observer.OnPluginUpload(this);
-            }
-        }
-
-        private void OnReportPlugins() {
-            foreach (var observer in this._observers) {
-                observer.OnReportPlugins(this);
             }
         }
     }

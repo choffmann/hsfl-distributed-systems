@@ -9,6 +9,7 @@ using System.ServiceModel.Discovery;
 using System.Text;
 using System.Threading.Tasks;
 using hsfl.ceho5518.vs.server.Plugins;
+using hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {
     public class ServerDiscoveryServiceHost  {
@@ -31,7 +32,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
                 this.serviceHost.Description.Behaviors.Add(smb);
                 this.serviceHost.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mex");
-                this.serviceHost.AddServiceEndpoint(typeof(IServerDiscoveryService), new NetTcpBinding(), string.Empty);
+                this.serviceHost.AddServiceEndpoint(typeof(ServiceContracts.ServerDiscoveryService.IServerDiscoveryService), new NetTcpBinding(), string.Empty);
 
                 // Create an announcement endpoint, which points to the Announcement Endpoint hosted by the proxy service.
                 var announcementEndpoint = new AnnouncementEndpoint(new NetTcpBinding(), new EndpointAddress(this.announcementEndpointAddress));
