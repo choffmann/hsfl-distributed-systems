@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using hsfl.ceho5518.vs.server.Plugins;
 using hsfl.ceho5518.vs.server.ServiceContracts;
 using hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService;
+using hsfl.ceho5518.vs.server.State;
 using PluginContract;
 using Logger = hsfl.ceho5518.vs.LoggerService.Logger;
 
@@ -35,6 +36,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
             return PluginService.GetInstance().PluginsList.Select(x => x.Name).ToList();
         }
         public ServerStatus ReportStatus() {
+            this.logger.Debug($"My state is {GlobalState.GetInstance().ServerStatus}");
             return GlobalState.GetInstance().ServerStatus;
         }
         public int OnRegisterNewPlugin(byte[] plugin) {
@@ -50,18 +52,24 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
         public int OnRunPlugin(string pluginName, string input) {
             try {
-                
-                this.logger.Info("Register new Plugin");
                 foreach (var plugin in PluginService.GetInstance().PluginsList.Where(plugin => plugin.Name.Equals(pluginName))) {
-                    plugin.OnServerExecute(input);
+                    Thread pluginThread = new Thread(() => RunPluginThread(plugin, input));
+                    pluginThread.Start();
                 }
                 return 0;
             }
             catch (Exception e) {
                 this.logger.Error($"Ein unerwarteter Fehler wurde beim ausführen des Plugins {pluginName} ausgelöst.");
+                GlobalState.GetInstance().ServerStatus = ServerStatus.ERROR;
                 this.logger.Exception(e);
                 return 29;
             }
+        }
+        
+        private void RunPluginThread(Plugin plugin, string input) {
+            GlobalState.GetInstance().ServerStatus = ServerStatus.WORKING;
+            plugin.OnServerExecute(input);
+            GlobalState.GetInstance().ServerStatus = ServerStatus.IDLE;
         }
     }
 }

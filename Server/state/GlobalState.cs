@@ -13,30 +13,19 @@ using hsfl.ceho5518.vs.server.ServiceContracts;
 namespace hsfl.ceho5518.vs.server.Sate {
     public class GlobalState {
         static GlobalState instance;
-        private ServerStatus _serverStatus = ServerStatus.STARTING;
         public ServerState ServerState { get; set; }
         public string ServerId { get; } = Guid.NewGuid().ToString();
         public string ApplicationDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "hsfl",
             "ceho5518", "distributed-systems");
         public ServiceContracts.ServerDiscoveryService.IServerDiscoveryService ServiceProxy { get; set; }
 
-        public ServerStatus ServerStatus {
-            get {
-                return this._serverStatus;
-            }
-            set {
-                ServiceContracts.ServiceState.Instance.CurrentState = value;
-                this._serverStatus = value;
-            }
-        }
+        public ServerStatus ServerStatus { get; set; } = ServerStatus.STARTING;
 
         // Debug things...
         public bool ClearAllOnStart { get; set; } = false;
 
         private GlobalState() {
-            // Set state to WORKER on default
             ServerState = ServerState.WORKER;
-            ServiceState.Instance.CurrentId = ServerId.ToString();
         }
 
         public static GlobalState GetInstance() {

@@ -25,8 +25,8 @@ namespace Primfaktorzerlegung {
                         output += $"{calc[i]} * ";
                     }
                 }
-                this.Logger.Debug("Warte 1 Minute zur Simulation. Status sollte 'WORKING' sein.");
-                Thread.Sleep(60000);
+                this.Logger.Debug("Warte 30 Sekunden zur Simulation. Status sollte 'WORKING' sein.");
+                Thread.Sleep(30000);
                 this.Logger.Info($"Ergebnis ist: {output}");
             }
             catch (OverflowException e) {
