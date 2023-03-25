@@ -16,11 +16,11 @@ namespace Primfaktorzerlegung {
 
         public override void OnServerExecute(string[] input) {
             try {
-                var calc = Calc(Convert.ToInt32(input));
+                var calc = Calc(Convert.ToInt32(input[0]));
                 string output = "";
                 for (int i = 1; i < calc.Count; i++) {
                     if (i == calc.Count - 1) {
-                        output += $"{calc[i]} = {input}";
+                        output += $"{calc[i]} = {input[0]}";
                     } else {
                         output += $"{calc[i]} * ";
                     }
@@ -30,7 +30,7 @@ namespace Primfaktorzerlegung {
                 this.Logger.Info($"Ergebnis ist: {output}");
             }
             catch (OverflowException e) {
-                this.Logger.Error($"Fehler beim konvertieren der Nummer {input}");
+                this.Logger.Error($"Fehler beim konvertieren der Nummer {input[0]}");
                 throw;
             }
         }
