@@ -11,8 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using hsfl.ceho5518.vs.Client.Injections;
-using hsfl.ceho5518.vs.Client.Logger;
-using hsfl.ceho5518.vs.Client.Plugins;
 
 namespace hsfl.ceho5518.vs.Client {
     internal class Program {
@@ -26,6 +24,7 @@ namespace hsfl.ceho5518.vs.Client {
             registrations.AddSingleton<IDiscoveryMaster, DiscoveryMaster>();
             registrations.AddSingleton<IConnector, Connector>();
             var registrar = new TypeRegistrar(registrations);
+            
             var app = new CommandApp(registrar);
             app.Configure(config => {
                 config.SetApplicationVersion("v0.1");
@@ -40,14 +39,13 @@ namespace hsfl.ceho5518.vs.Client {
                     .WithDescription("Display server status");
 
                 config.AddBranch<PluginCommand.Settings>("plugin", plugin => {
+                    plugin.SetDescription("Work with Plugins");
                     plugin.AddCommand<PluginStatusCommand>("status");
                     plugin.AddCommand<PluginUploadCommand>("load");
-                    plugin.AddCommand<PluginListCommand>("ls");
+                    plugin.AddCommand<PluginListCommand>("run")
+                        .WithExample(new []{"prime", "300"})
+                        .WithExample(new []{"plugin_name", "input"});
                 });
-
-                foreach (var plugin in PluginService.GetInstance().PluginList) {
-                    //config.AddCommand(plugin.CommandName)};
-                }
             });
             return app.Run(args);
         }

@@ -8,7 +8,6 @@ using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.Plugins;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using PluginService = hsfl.ceho5518.vs.Client.Plugins.PluginService;
 
 namespace hsfl.ceho5518.vs.Client.Commands {
     public sealed class PluginCommand : Command<PluginCommand.Settings> {
@@ -16,9 +15,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         private readonly IConnector _connector;
         private ILogger logger;
 
-        public sealed class Settings : CommandSettings {
-            
-        }
+        public sealed class Settings : CommandSettings { }
 
         public PluginCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
             this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
@@ -31,7 +28,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         }
     }
 
-    public sealed class PluginUploadCommand: Command<PluginUploadCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
+    public sealed class PluginUploadCommand : Command<PluginUploadCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
         private readonly IInvokeClientDiscovery _invokeClient;
         private readonly IConnector _connector;
         private ILogger logger;
@@ -40,7 +37,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
             this.logger = ClientLogger.Logger;
         }
-        
+
         public sealed class Settings : CommandSettings {
             [CommandArgument(0, "<PATH>")]
             public string PluginPath { get; set; }
@@ -51,8 +48,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
 
             this.logger.Info("Hello");
             byte[] assembly = File.ReadAllBytes(settings.PluginPath);
-            this._invokeClient.UploadPlugin(assembly);
-            return 0;
+            return this._invokeClient.UploadPlugin(assembly);
         }
     }
 
@@ -72,10 +68,10 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         public override int Execute(CommandContext context, Settings settings) {
             this._connector.Setup();
             PrintStatusTable();
-            
+
             return 0;
         }
-        
+
         private void PrintStatusTable() {
             var status = this._invokeClient.PluginStatus().Plugins;
             var table = new Table();
@@ -93,19 +89,29 @@ namespace hsfl.ceho5518.vs.Client.Commands {
     }
 
     public sealed class PluginListCommand : Command<PluginListCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
-        public sealed class Settings : CommandSettings { }
+        public sealed class Settings : CommandSettings {
+            [CommandArgument(0, "<PluginName>")]
+            public string PluginName { get; set; }
+            
+            [CommandArgument(1, "[InputArgs]")]
+            public string Number { get; set; }
+        }
+
+        private readonly IInvokeClientDiscovery _invokeClient;
+        private readonly IConnector _connector;
+        private ILogger logger;
+
+        public PluginListCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
+            this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
+            this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
+            this.logger = ClientLogger.Logger;
+        }
 
         public override int Execute(CommandContext context, Settings settings) {
-            var pluginList = PluginService.GetInstance().PluginList;
-            AnsiConsole.MarkupLine($"Plugins loaded: {pluginList.Count}");
-            foreach (var plugin in pluginList) {
-                plugin.OnClientExecute(30);
-            }
-            /*var table = new Table();
-            table.AddColumn("Name");
-            table.AddColumn("Active");
-            table.AddColumn("Size");*/
-            
+            this._connector.Setup();
+            var response = this._invokeClient.ExecutePlugin(settings.PluginName, settings.Number);
+            AnsiConsole.MarkupLine($"Response: {response}");
+
             return 0;
         }
     }

@@ -15,7 +15,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
         static GlobalState instance;
         private ServerStatus _serverStatus = ServerStatus.STARTING;
         public ServerState ServerState { get; set; }
-        public string ServerId { get; } = Regex.Replace(Convert.ToBase64String(Guid.NewGuid().ToByteArray()), "[/+=]", "").ToLower();
+        public string ServerId { get; } = Guid.NewGuid().ToString();
         public string ApplicationDir { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "hsfl",
             "ceho5518", "distributed-systems");
         public ServiceContracts.ServerDiscoveryService.IServerDiscoveryService ServiceProxy { get; set; }
@@ -25,7 +25,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
                 return this._serverStatus;
             }
             set {
-                ServiceContracts.ServiceState.GetInstance().CurrentState = value;
+                ServiceContracts.ServiceState.Instance.CurrentState = value;
                 this._serverStatus = value;
             }
         }
@@ -36,7 +36,7 @@ namespace hsfl.ceho5518.vs.server.Sate {
         private GlobalState() {
             // Set state to WORKER on default
             ServerState = ServerState.WORKER;
-            ServiceState.GetInstance().CurrentId = ServerId.ToString();
+            ServiceState.Instance.CurrentId = ServerId.ToString();
         }
 
         public static GlobalState GetInstance() {

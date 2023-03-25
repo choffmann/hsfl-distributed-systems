@@ -29,11 +29,14 @@ namespace hsfl.ceho5518.vs.Client {
         public List<ServerStatusDetail> GetServerStatus() {
             return this.serviceProxy.GetServerStatus();
         }
-        public void UploadPlugin(byte[] assembly) {
-            this.serviceProxy.UploadPlugin(assembly);
+        public int UploadPlugin(byte[] assembly) {
+            return this.serviceProxy.UploadPlugin(assembly);
         }
         public PluginStatus PluginStatus() {
             return this.serviceProxy.PluginStatus();
+        }
+        public int ExecutePlugin(string pluginCommand, string value) {
+            return this.serviceProxy.ExecutePlugin(pluginCommand, value);
         }
     }
 }

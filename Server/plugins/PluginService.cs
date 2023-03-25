@@ -5,26 +5,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using hsfl.ceho5518.vs.server.Sate;
 using hsfl.ceho5518.vs.server.ServiceContracts.Model;
-using hsfl.ceho5518.vs.server.ServiceContracts.Observer;
 using Plugin = PluginContract.Plugin;
 
 namespace hsfl.ceho5518.vs.server.Plugins {
-    public class PluginService : IPluginObserver {
+    public class PluginService  {
         private readonly ILogger logger = LoggerService.Logger.Instance;
         static PluginService instance;
-        private readonly List<PluginContract.Plugin> pluginsList = new List<PluginContract.Plugin>();
-        private readonly string pluginPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
-
-        private PluginObserver _pluginObserver = PluginObserver.GetInstance();
+        public List<Plugin> PluginsList = new List<Plugin>();
+        public string PluginPath { get; }= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins", GlobalState.GetInstance().ServerId);
 
         private PluginService() {
-            this._pluginObserver.AddObserver(this);
         }
 
         public static PluginService GetInstance() {
@@ -34,7 +26,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         public void Startup() {
             AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
                 $"Register Plugins...", ctx => {
-                    this.logger.Debug($"Plugin path is {this.pluginPath}");
+                    this.logger.Debug($"Plugin path is {this.PluginPath}");
                     CreatePluginFolder();
 
                     // Load Plugins
@@ -47,9 +39,9 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         private void LoadPlugins() {
-            this.logger.Debug($"Load plugins from path: [bold gray]{this.pluginPath}[/]");
+            this.logger.Debug($"Load plugins from path: [bold gray]{this.PluginPath}[/]");
             try {
-                string[] dlls = Directory.GetFiles(this.pluginPath, "*.dll");
+                string[] dlls = Directory.GetFiles(this.PluginPath, "*.dll");
                 if (dlls.Length == 0) {
                     this.logger.Info("No Plugins available");
                     return;
@@ -61,7 +53,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 }
             }
             catch (DirectoryNotFoundException e) {
-                this.logger.Error($"It seems like the path is incomplete {this.pluginPath}");
+                this.logger.Error($"It seems like the path is incomplete {this.PluginPath}");
             }
             catch (ReflectionTypeLoadException ex) {
                 this.logger.Error($"Failed to load plugin.");
@@ -76,7 +68,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
 
         // Total amount of loaded plugins
         public int LoadedPlugins() {
-            return this.pluginsList.Count;
+            return this.PluginsList.Count;
         }
 
         public void AddPlugin(Assembly assembly) {
@@ -91,7 +83,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
 
         public void ReloadPlugins() {
             this.logger.Info("Reloading plugins...");
-            this.pluginsList.Clear();
+            this.PluginsList.Clear();
             LoadPlugins();
             this.logger.SuccessEmoji("Reloading plugins successfully");
         }
@@ -101,7 +93,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 this.logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
                 plugin.OnServerInit();
                 this.logger.Success($"Successfully register plugin {plugin.Name}");
-                this.pluginsList.Add(plugin);
+                this.PluginsList.Add(plugin);
             }
             catch (Exception ex) {
                 this.logger.Exception(ex);
@@ -111,7 +103,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         private void OnStartup() {
-            foreach (var plugin in this.pluginsList) {
+            foreach (var plugin in this.PluginsList) {
                 try {
                     this.logger.Info($"Start Plugin {plugin.Name}");
                     plugin.OnServerStartup();
@@ -125,7 +117,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         public void OnStop() {
-            foreach (var plugin in this.pluginsList) {
+            foreach (var plugin in this.PluginsList) {
                 this.logger.Info($"Deregister plugin [gray]{plugin.Name}[/]");
                 plugin.OnServerStop();
             }
@@ -134,8 +126,8 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         private void CreatePluginFolder() {
-            if (!Directory.Exists(this.pluginPath)) {
-                Directory.CreateDirectory(this.pluginPath);
+            if (!Directory.Exists(this.PluginPath)) {
+                Directory.CreateDirectory(this.PluginPath);
             }
         }
 
@@ -149,19 +141,20 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             throw new Exception("Fehler beim laden von neuem Plugin");
         }
 
-        public void OnPluginUpload(PluginObserver plugin) {
-            string name = GetNameFromDll(plugin.Assembly);
+        public void OnPluginUpload(byte[] assemblyBytes) {
+            string name = GetNameFromDll(assemblyBytes);
             this.logger.Debug($"Plugin [grey]{name}[/] wurde vom Client hochgeladen und wird registriert");
-            string path = this.pluginPath + "\\" + name + ".dll";
-            File.WriteAllBytes(path, plugin.Assembly);
+            string path = this.PluginPath + "\\" + name + ".dll";
+            File.WriteAllBytes(path, assemblyBytes);
             var assembly = Assembly.LoadFrom(path);
             AddPlugin(assembly);
         }
 
         public PluginStatus ReportPlugins() {
-            var reportList = this.pluginsList.Select(plugin => new ServiceContracts.Model.Plugin {
+            var reportList = this.PluginsList.Select(plugin => new ServiceContracts.Model.Plugin {
                     Name = plugin.Name, 
-                    Size = new FileInfo(this.pluginPath + "\\" + plugin.Name + ".dll").Length, 
+                    CommandName = plugin.CommandName,
+                    Size = new FileInfo(this.PluginPath + "\\" + plugin.Name + ".dll").Length, 
                     Activated = true 
                 }).ToList();
             return new PluginStatus(reportList);

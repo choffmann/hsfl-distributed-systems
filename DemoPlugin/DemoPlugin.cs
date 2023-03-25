@@ -7,16 +7,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DemoPlugin
-{
+namespace DemoPlugin {
     public class DemoPlugin : Plugin {
-
-        public DemoPlugin(): base("DemoPlugin") { }
-
-        public override void OnClientInit() {
-            this.Logger.Info("Hello Client :waving_hands:");
+        public DemoPlugin() : base("DemoPlugin") { }
+        
+        public override void OnServerExecute(string input) {
+            this.Logger.Info("Dies ist nur ein DemoPlugin");
         }
-
         public override void OnServerInit() {
             TestLogger();
             Thread.Sleep(2000);

@@ -9,6 +9,7 @@ using System.ServiceModel.Discovery;
 using System.Text;
 using System.Threading.Tasks;
 using hsfl.ceho5518.vs.server.Plugins;
+using hsfl.ceho5518.vs.server.ServiceContracts;
 using hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService;
 
 namespace hsfl.ceho5518.vs.server.ConcreatService {

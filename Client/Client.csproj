@@ -85,7 +85,6 @@
     <Compile Include="Injections\TypeResolver.cs" />
     <Compile Include="Logger\ClientLogger.cs" />
     <Compile Include="Logger\NoLogger.cs" />
-    <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Services\Connector.cs" />
     <Compile Include="Services\DiscoveryMaster.cs" />
     <Compile Include="Program.cs" />
@@ -109,6 +108,9 @@
       <Project>{99766f3d-7208-4d36-9cce-0341dfa0bddd}</Project>
       <Name>Server</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

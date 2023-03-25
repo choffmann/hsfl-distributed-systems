@@ -4,7 +4,6 @@ using System.ServiceModel;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.Plugins;
 using hsfl.ceho5518.vs.server.ServiceContracts.Model;
-using hsfl.ceho5518.vs.server.ServiceContracts.Observer;
 
 namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
     [ServiceContract(Namespace = "http://hsfl.ceho5518.vs.server.ConcreatService.ClientDiscovery")]
@@ -15,16 +14,18 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
         [OperationContract]
         List<ServerStatusDetail> GetServerStatus();
 
-        [OperationContract(IsOneWay = true)]
-        void UploadPlugin(byte[] assembly);
-        
+        [OperationContract]
+        int UploadPlugin(byte[] assembly);
+
         [OperationContract]
         PluginStatus PluginStatus();
+
+        [OperationContract]
+        int ExecutePlugin(string pluginCommand, string value);
     }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class ClientDiscoveryService : IClientDiscoveryService {
-        private PluginObserver _plugin = PluginObserver.GetInstance();
         private readonly ILogger logger = Logger.Instance;
         public void Connect(string clientId) {
             this.logger.Debug($"Client {clientId} connected to system");
@@ -32,14 +33,14 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
         public List<ServerStatusDetail> GetServerStatus() {
             var response = new List<ServerStatusDetail>();
             var masterStatus = new ServerStatusDetail {
-                CurrentState = ServiceState.GetInstance().CurrentState,
-                Id = ServiceState.GetInstance().CurrentId,
+                CurrentState = ServiceState.Instance.CurrentState,
+                Id = ServiceState.Instance.CurrentId,
                 IsWorker = false
             };
 
             response.Add(masterStatus);
 
-            foreach (var worker in ServiceState.GetInstance().Workers) {
+            foreach (var worker in ServiceState.Instance.Workers) {
                 try {
                     var status = worker.Value.ReportStatus();
                     var workerStatus = new ServerStatusDetail {
@@ -61,11 +62,23 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
             }
             return response;
         }
-        public void UploadPlugin(byte[] assembly) {
-            this._plugin.Assembly = assembly;
+        public int UploadPlugin(byte[] assembly) {
+            PluginService.GetInstance().OnPluginUpload(assembly);
+            var serverService = new ServerDiscoveryService.ServerDiscoveryService();
+            return serverService.RegisterNewPlugin(assembly);
         }
         public PluginStatus PluginStatus() {
             return PluginService.GetInstance().ReportPlugins();
+        }
+        public int ExecutePlugin(string pluginCommand, string value) {
+            var pluginList = PluginService.GetInstance().PluginsList;
+            foreach (var plugin in pluginList) {
+                if (plugin.CommandName.Equals(pluginCommand)) {
+                    var serverService = new ServerDiscoveryService.ServerDiscoveryService();
+                    return serverService.ExecutePlugin(plugin.Name, value);
+                }
+            }
+            return 20;
         }
     }
 

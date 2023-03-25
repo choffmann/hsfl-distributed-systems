@@ -19,6 +19,8 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.Model {
         [DataMember]
         public string Name { get; set; }
         [DataMember]
+        public string CommandName { get; set; }
+        [DataMember]
         public long Size { get; set; }
     }
 }
