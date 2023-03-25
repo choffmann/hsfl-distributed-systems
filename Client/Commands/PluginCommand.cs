@@ -5,8 +5,10 @@ using System.Reflection;
 using hsfl.ceho5518.vs.Client.Logger;
 using hsfl.ceho5518.vs.Client.Services;
 using hsfl.ceho5518.vs.LoggerService;
+using hsfl.ceho5518.vs.server.Plugins;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using PluginService = hsfl.ceho5518.vs.Client.Plugins.PluginService;
 
 namespace hsfl.ceho5518.vs.Client.Commands {
     public sealed class PluginCommand : Command<PluginCommand.Settings> {
@@ -87,6 +89,24 @@ namespace hsfl.ceho5518.vs.Client.Commands {
 
             AnsiConsole.Write(table);
             AnsiConsole.MarkupLine($"Total plugin loaded: {status.Count}");
+        }
+    }
+
+    public sealed class PluginListCommand : Command<PluginListCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
+        public sealed class Settings : CommandSettings { }
+
+        public override int Execute(CommandContext context, Settings settings) {
+            var pluginList = PluginService.GetInstance().PluginList;
+            AnsiConsole.MarkupLine($"Plugins loaded: {pluginList.Count}");
+            foreach (var plugin in pluginList) {
+                plugin.OnClientExecute(30);
+            }
+            /*var table = new Table();
+            table.AddColumn("Name");
+            table.AddColumn("Active");
+            table.AddColumn("Size");*/
+            
+            return 0;
         }
     }
 }

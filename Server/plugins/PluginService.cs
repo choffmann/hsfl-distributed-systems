@@ -99,7 +99,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         private void OnInit(Plugin plugin) {
             try {
                 this.logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
-                plugin.OnInit();
+                plugin.OnServerInit();
                 this.logger.Success($"Successfully register plugin {plugin.Name}");
                 this.pluginsList.Add(plugin);
             }
@@ -114,7 +114,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             foreach (var plugin in this.pluginsList) {
                 try {
                     this.logger.Info($"Start Plugin {plugin.Name}");
-                    plugin.OnStartup();
+                    plugin.OnServerStartup();
                     this.logger.Success($"Plugin [bold springgreen3]{plugin.Name}[/] started successfully");
                 }
                 catch (Exception ex) {
@@ -127,7 +127,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         public void OnStop() {
             foreach (var plugin in this.pluginsList) {
                 this.logger.Info($"Deregister plugin [gray]{plugin.Name}[/]");
-                plugin.OnStop();
+                plugin.OnServerStop();
             }
             this.logger.Info("Startup Plugins...");
             this.logger.Success($"Successfully start [bold green]{LoadedPlugins()}[/] plugins");

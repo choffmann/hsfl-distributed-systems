@@ -13,13 +13,17 @@ namespace DemoPlugin
 
         public DemoPlugin(): base("DemoPlugin") { }
 
-        public override void OnInit() {
+        public override void OnClientInit() {
+            this.Logger.Info("Hello Client :waving_hands:");
+        }
+
+        public override void OnServerInit() {
             TestLogger();
             Thread.Sleep(2000);
             //throw new NotImplementedException("Ein Fehler beim Aufruf von OnInit() :smiling_face_with_horns:");
         }
 
-        public override void OnStartup() {
+        public override void OnServerStartup() {
             Thread.Sleep(2000);
         }
 

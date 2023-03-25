@@ -79,11 +79,13 @@
   <ItemGroup>
     <Compile Include="Commands\DefaultSettings.cs" />
     <Compile Include="Commands\PluginCommand.cs" />
+    <Compile Include="Commands\RegisterPluginCommand.cs" />
     <Compile Include="Commands\StatusCommand.cs" />
     <Compile Include="Injections\TypeRegistrar.cs" />
     <Compile Include="Injections\TypeResolver.cs" />
     <Compile Include="Logger\ClientLogger.cs" />
     <Compile Include="Logger\NoLogger.cs" />
+    <Compile Include="Plugins\PluginService.cs" />
     <Compile Include="Services\Connector.cs" />
     <Compile Include="Services\DiscoveryMaster.cs" />
     <Compile Include="Program.cs" />
@@ -98,6 +100,10 @@
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{35d4fff8-14a7-4fee-b721-73ff00e9271c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginContract\PluginContract.csproj">
+      <Project>{5aeea4a8-508d-4f74-8ae2-625200dd862f}</Project>
+      <Name>PluginContract</Name>
     </ProjectReference>
     <ProjectReference Include="..\Server\Server.csproj">
       <Project>{99766f3d-7208-4d36-9cce-0341dfa0bddd}</Project>

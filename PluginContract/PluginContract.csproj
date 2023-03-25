@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientPlugin\ClientPlugin.cs" />
+    <Compile Include="ClientPlugin\CommandArgument.cs" />
     <Compile Include="ILifecycle.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Plugin.cs" />

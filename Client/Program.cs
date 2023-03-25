@@ -12,6 +12,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using hsfl.ceho5518.vs.Client.Injections;
 using hsfl.ceho5518.vs.Client.Logger;
+using hsfl.ceho5518.vs.Client.Plugins;
 
 namespace hsfl.ceho5518.vs.Client {
     internal class Program {
@@ -40,8 +41,13 @@ namespace hsfl.ceho5518.vs.Client {
 
                 config.AddBranch<PluginCommand.Settings>("plugin", plugin => {
                     plugin.AddCommand<PluginStatusCommand>("status");
-                    plugin.AddCommand<PluginUploadCommand>("upload");
+                    plugin.AddCommand<PluginUploadCommand>("load");
+                    plugin.AddCommand<PluginListCommand>("ls");
                 });
+
+                foreach (var plugin in PluginService.GetInstance().PluginList) {
+                    //config.AddCommand(plugin.CommandName)};
+                }
             });
             return app.Run(args);
         }
