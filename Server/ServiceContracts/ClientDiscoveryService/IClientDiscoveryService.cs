@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.Plugins;
+using hsfl.ceho5518.vs.server.Sate;
 using hsfl.ceho5518.vs.server.ServiceContracts.Model;
 
 namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
@@ -33,8 +34,8 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
         public List<ServerStatusDetail> GetServerStatus() {
             var response = new List<ServerStatusDetail>();
             var masterStatus = new ServerStatusDetail {
-                CurrentState = ServiceState.Instance.CurrentState,
-                Id = ServiceState.Instance.CurrentId,
+                CurrentState = GlobalState.GetInstance().ServerStatus,
+                Id = GlobalState.GetInstance().ServerId,
                 IsWorker = false
             };
 

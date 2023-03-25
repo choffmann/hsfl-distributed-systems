@@ -7,9 +7,6 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts {
         static readonly ServiceState instance = new ServiceState();
         public Dictionary<string, IServerDiscoveryServiceCallback> Workers { get; set; } =
             new Dictionary<string, IServerDiscoveryServiceCallback>();
-        public ServerStatus CurrentState { get; set; }
-        public string CurrentId { get; set; }
-        //public ServiceContracts.ServerDiscoveryService.IServerDiscoveryService ServerService { get; set; }
         static ServiceState() { }
         private ServiceState() {
             //ServerService = new ServiceContracts.ServerDiscoveryService.ServerDiscoveryService();

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using System.Threading;
+using System.Threading.Tasks;
 using hsfl.ceho5518.vs.LoggerService;
 using hsfl.ceho5518.vs.server.Plugins;
 using PluginContract;
@@ -74,7 +76,8 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
                     }
 
                     // Run Plugin
-                    return worker.Value.OnRunPlugin(pluginName, input);
+                    Task<int> workerThread = Task.Run(() => worker.Value.OnRunPlugin(pluginName, input));
+                    return workerThread.Result;
                 }
                 catch (Exception e) {
                     this.logger.Exception(e);
@@ -84,6 +87,7 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
             this.logger.Warning("Aktuell sind keine Worker verfügbar. Breche Operation ab.");
             return 10;
         }
+
         public void SayGoodbye(string workerId) {
             bool removeSuccess = this.workers.Remove(workerId);
             if (removeSuccess) {
