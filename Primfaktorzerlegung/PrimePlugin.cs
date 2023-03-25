@@ -14,7 +14,7 @@ namespace Primfaktorzerlegung {
         public string PrimeOutput { get; set; }
         public PrimePlugin() : base("Primfaktorzerlegung") { }
 
-        public override void OnServerExecute(string input) {
+        public override void OnServerExecute(string[] input) {
             try {
                 var calc = Calc(Convert.ToInt32(input));
                 string output = "";

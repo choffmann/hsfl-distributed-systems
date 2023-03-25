@@ -94,7 +94,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             public string PluginName { get; set; }
             
             [CommandArgument(1, "[InputArgs]")]
-            public string Number { get; set; }
+            public string[] Number { get; set; }
         }
 
         private readonly IInvokeClientDiscovery _invokeClient;

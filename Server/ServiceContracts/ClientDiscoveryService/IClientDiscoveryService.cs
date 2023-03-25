@@ -22,7 +22,7 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
         PluginStatus PluginStatus();
 
         [OperationContract]
-        int ExecutePlugin(string pluginCommand, string value);
+        int ExecutePlugin(string pluginCommand, string[] args);
     }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
@@ -71,12 +71,12 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ClientDiscoveryService {
         public PluginStatus PluginStatus() {
             return PluginService.GetInstance().ReportPlugins();
         }
-        public int ExecutePlugin(string pluginCommand, string value) {
+        public int ExecutePlugin(string pluginCommand, string[] args) {
             var pluginList = PluginService.GetInstance().PluginsList;
             foreach (var plugin in pluginList) {
                 if (plugin.CommandName.Equals(pluginCommand)) {
                     var serverService = new ServerDiscoveryService.ServerDiscoveryService();
-                    return serverService.ExecutePlugin(plugin.Name, value);
+                    return serverService.ExecutePlugin(plugin.Name, args);
                 }
             }
             return 20;

@@ -50,7 +50,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 return 28;
             }
         }
-        public int OnRunPlugin(string pluginName, string input) {
+        public int OnRunPlugin(string pluginName, string[] input) {
             try {
                 foreach (var plugin in PluginService.GetInstance().PluginsList.Where(plugin => plugin.Name.Equals(pluginName))) {
                     Thread pluginThread = new Thread(() => RunPluginThread(plugin, input));
@@ -66,7 +66,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
             }
         }
         
-        private void RunPluginThread(Plugin plugin, string input) {
+        private void RunPluginThread(Plugin plugin, string[] input) {
             GlobalState.GetInstance().ServerStatus = ServerStatus.WORKING;
             plugin.OnServerExecute(input);
             GlobalState.GetInstance().ServerStatus = ServerStatus.IDLE;

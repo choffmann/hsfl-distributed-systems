@@ -25,7 +25,7 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
         void GetStatus();
 
         [OperationContract]
-        int ExecutePlugin(string pluginName, string input);
+        int ExecutePlugin(string pluginName, string[] args);
 
         [OperationContract(IsOneWay = true)]
         void SayGoodbye(string workerId);
@@ -63,7 +63,7 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
                 this.logger.Debug($"-> {status}");
             }
         }
-        public int ExecutePlugin(string pluginName, string input) {
+        public int ExecutePlugin(string pluginName, string[] args) {
             foreach (var worker in this.workers.Where(worker => worker.Value.ReportStatus() == ServerStatus.IDLE)) {
                 try {
                     // Check if Worker has plugin installed
@@ -76,7 +76,7 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
                     }
 
                     // Run Plugin
-                    Task<int> workerThread = Task.Run(() => worker.Value.OnRunPlugin(pluginName, input));
+                    Task<int> workerThread = Task.Run(() => worker.Value.OnRunPlugin(pluginName, args));
                     return workerThread.Result;
                 }
                 catch (Exception e) {
@@ -114,6 +114,6 @@ namespace hsfl.ceho5518.vs.server.ServiceContracts.ServerDiscoveryService {
         int OnRegisterNewPlugin(byte[] plugin);
 
         [OperationContract]
-        int OnRunPlugin(string pluginName, string input);
+        int OnRunPlugin(string pluginName, string[] args);
     }
 }

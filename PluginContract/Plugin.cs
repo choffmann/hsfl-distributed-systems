@@ -22,7 +22,7 @@ namespace PluginContract {
             this.Name = pluginName;
             this.Logger.PluginName = pluginName;
         }
-        public abstract void OnServerExecute(string input);
+        public abstract void OnServerExecute(string[] input);
 
         public virtual void OnServerInit() { }
 

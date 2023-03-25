@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primfaktorzerlegung", "Primfaktorzerlegung\Primfaktorzerlegung.csproj", "{92085860-79AA-4454-A51B-6C89A0891FB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HashKollision", "HashKollision\HashKollision.csproj", "{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{92085860-79AA-4454-A51B-6C89A0891FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92085860-79AA-4454-A51B-6C89A0891FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92085860-79AA-4454-A51B-6C89A0891FB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{5AEEA4A8-508D-4F74-8AE2-625200DD862F} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
 		{DDFC32BE-8578-4CDF-985F-BB89694C7A83} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
 		{92085860-79AA-4454-A51B-6C89A0891FB7} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
+		{A6168EA8-36A0-47DD-BFD0-3D55D4AB234D} = {D0BC96FA-53B3-421E-A1E6-E2C06384F610}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {554B6106-2BB3-4453-B03F-2661602C61BF}

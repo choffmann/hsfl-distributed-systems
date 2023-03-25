@@ -11,7 +11,7 @@ namespace DemoPlugin {
     public class DemoPlugin : Plugin {
         public DemoPlugin() : base("DemoPlugin") { }
         
-        public override void OnServerExecute(string input) {
+        public override void OnServerExecute(string[] input) {
             this.Logger.Info("Dies ist nur ein DemoPlugin");
         }
         public override void OnServerInit() {
