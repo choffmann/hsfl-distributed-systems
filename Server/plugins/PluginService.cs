@@ -25,13 +25,13 @@ namespace hsfl.ceho5518.vs.server.Plugins {
 
         public void Startup() {
             AnsiConsole.Status().Spinner(Spinner.Known.Moon).Start(
-                $"Register Plugins...", ctx => {
-                    this.logger.Debug($"Plugin path is {this.PluginPath}");
+                $"Registriere Plugins...", ctx => {
+                    this.logger.Debug($"Plugin Pfad ist: {this.PluginPath}");
                     CreatePluginFolder();
 
                     // Load Plugins
                     LoadPlugins();
-                    ctx.Status("Startup Plugins...");
+                    ctx.Status("Plugins werden gestartet...");
 
                     // Run the Startup Lifecycle
                     OnStartup();
@@ -43,7 +43,7 @@ namespace hsfl.ceho5518.vs.server.Plugins {
             try {
                 string[] dlls = Directory.GetFiles(this.PluginPath, "*.dll");
                 if (dlls.Length == 0) {
-                    this.logger.Info("No Plugins available");
+                    this.logger.Info("Es sind keine Plugins verfügbar");
                     return;
                 }
 
@@ -53,16 +53,16 @@ namespace hsfl.ceho5518.vs.server.Plugins {
                 }
             }
             catch (DirectoryNotFoundException e) {
-                this.logger.Error($"It seems like the path is incomplete {this.PluginPath}");
+                this.logger.Error($"Es sieht so aus als würde es den Pfad nicht geben: {this.PluginPath}");
             }
             catch (ReflectionTypeLoadException ex) {
-                this.logger.Error($"Failed to load plugin.");
+                this.logger.Error($"Fehler beim laden von Plugin.");
             }
 
             if (LoadedPlugins() > 0) {
-                this.logger.Success($"Load [bold green]{LoadedPlugins()}[/] plugins");
+                this.logger.Success($"Es wurden [bold green]{LoadedPlugins()}[/] Plugins geladen.");
             } else {
-                this.logger.Info("No plugins loaded");
+                this.logger.Info("Keine Plugins geladen.");
             }
         }
 
@@ -82,47 +82,45 @@ namespace hsfl.ceho5518.vs.server.Plugins {
         }
 
         public void ReloadPlugins() {
-            this.logger.Info("Reloading plugins...");
+            this.logger.Info("Plugins werden neugestartet...");
             this.PluginsList.Clear();
             LoadPlugins();
-            this.logger.SuccessEmoji("Reloading plugins successfully");
+            this.logger.Success("Neustart der Plugins erfolgreich :tada:");
         }
 
         private void OnInit(Plugin plugin) {
             try {
-                this.logger.Info($"Register plugin [springgreen3]{plugin.Name}[/]");
+                this.logger.Info($"initialisiere Plugin [springgreen3]{plugin.Name}[/]");
                 plugin.OnServerInit();
-                this.logger.Success($"Successfully register plugin {plugin.Name}");
+                this.logger.Success($"initialisierung von Plugin {plugin.Name} war erfolgreich");
                 this.PluginsList.Add(plugin);
             }
             catch (Exception ex) {
                 this.logger.Exception(ex);
                 this.logger.Warning(
-                    $"Failed to register plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System will ignore plugin [bold springgreen3]{plugin.Name}[/]");
+                    $"Fehler beim initialisieren von Plugin [bold springgreen3]{plugin.Name}[/]. [bold red]{ex.Message}[/]. System wird das Plugin [bold springgreen3]{plugin.Name}[/] ignorieren.");
             }
         }
 
         private void OnStartup() {
             foreach (var plugin in this.PluginsList) {
                 try {
-                    this.logger.Info($"Start Plugin {plugin.Name}");
+                    this.logger.Info($"Plugin {plugin.Name} wird gestartet");
                     plugin.OnServerStartup();
-                    this.logger.Success($"Plugin [bold springgreen3]{plugin.Name}[/] started successfully");
+                    this.logger.Success($"Plugin [bold springgreen3]{plugin.Name}[/] wurde erfolgreich gestartet");
                 }
                 catch (Exception ex) {
                     this.logger.Exception(ex);
-                    this.logger.Error($"Failed to startup plugin {plugin.Name}. {ex.Message}");
+                    this.logger.Error($"Ein Fehler ist beim starten von Plugin {plugin.Name} aufgetreten. {ex.Message}");
                 }
             }
         }
 
         public void OnStop() {
             foreach (var plugin in this.PluginsList) {
-                this.logger.Info($"Deregister plugin [gray]{plugin.Name}[/]");
+                this.logger.Info($"Plugin [gray]{plugin.Name}[/] wird abgemeldet.");
                 plugin.OnServerStop();
             }
-            this.logger.Info("Startup Plugins...");
-            this.logger.Success($"Successfully start [bold green]{LoadedPlugins()}[/] plugins");
         }
 
         private void CreatePluginFolder() {

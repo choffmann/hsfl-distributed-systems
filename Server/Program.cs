@@ -23,6 +23,7 @@ namespace hsfl.ceho5518.vs.server {
     internal class Program {
         private static ILogger logger = Logger.Instance;
         static void Main(string[] args) {
+            Directory.CreateDirectory(@".\Logs");
             StartUp();
             SetupDiscovery();
             // Load Plugins
@@ -48,21 +49,8 @@ namespace hsfl.ceho5518.vs.server {
                 .Spinner(Spinner.Known.Dots)
                 .Start(
                     $"[yellow]Starte Server...[/]", ctx => {
-                        CreateAppDataFolder();
                         Thread.Sleep(2000);
                     });
-        }
-
-        private static void CreateAppDataFolder() {
-            logger.Info("Setting up Environment Application Folder");
-            logger.Debug($"Set Environment Application Folder at {GlobalState.GetInstance().ApplicationDir}");
-            if (GlobalState.GetInstance().ClearAllOnStart) {
-                if (Directory.Exists(GlobalState.GetInstance().ApplicationDir)) {
-                    logger.Debug($"Delete Directory {GlobalState.GetInstance().ApplicationDir}");
-                    Directory.Delete(GlobalState.GetInstance().ApplicationDir);
-                }
-            }
-            Directory.CreateDirectory(GlobalState.GetInstance().ApplicationDir);
         }
 
         private static void SetupDiscovery() {

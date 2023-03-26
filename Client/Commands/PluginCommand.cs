@@ -79,7 +79,7 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             table.AddColumn("Size");
 
             foreach (var plugin in status) {
-                table.AddRow(plugin.Name, plugin.Activated.ToString(), plugin.CommandName, plugin.Size.ToString());
+                table.AddRow(plugin.Name, plugin.CommandName, plugin.Activated.ToString(), plugin.Size.ToString());
             }
 
             AnsiConsole.Write(table);
@@ -109,9 +109,8 @@ namespace hsfl.ceho5518.vs.Client.Commands {
         public override int Execute(CommandContext context, Settings settings) {
             this._connector.Setup();
             var response = this._invokeClient.ExecutePlugin(settings.PluginName, settings.Number);
-            AnsiConsole.MarkupLine($"Response: {response}");
-
-            return 0;
+            AnsiConsole.MarkupLine(ConvertReturnCode.Convert(response));
+            return response;
         }
     }
 }

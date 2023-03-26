@@ -9,13 +9,9 @@ namespace PluginContract {
     public abstract class Plugin : ILifecycle {
         public string Name { get; }
         public virtual string CommandName { get; }
-        public virtual CommandArgument CommandArgument { get; set; }
-        public virtual object CommandArgumentType { get; set; }
         public PluginContract.Logger Logger { get; } = PluginContract.Logger.Instance;
 
         public Plugin() {
-            // Name = pluginName;
-            // PluginContract.Logger.Instance.PluginName = pluginName;
         }
 
         public Plugin(string pluginName) {

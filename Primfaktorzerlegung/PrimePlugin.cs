@@ -7,9 +7,7 @@ using PluginContract.ClientPlugin;
 
 namespace Primfaktorzerlegung {
     public class PrimePlugin : Plugin {
-        public override CommandArgument CommandArgument { get; set; } = new CommandArgument(0, "<PATH>");
         public override string CommandName { get; } = "prime";
-        public override object CommandArgumentType { get; set; } = typeof(string);
         public int PrimeInput { get; set; }
         public string PrimeOutput { get; set; }
         public PrimePlugin() : base("Primfaktorzerlegung") { }
@@ -36,24 +34,10 @@ namespace Primfaktorzerlegung {
                 throw;
             }
         }
+
         public override void OnServerInit() {
             this.Logger.Info("Wird gestartet...");
         }
-
-
-        /*public override void OnClientExecute(Action<int> number) {
-            string output = "";
-            var calc = Calc(number);
-            for (int i = 1; i <= calc.Count; i++) {
-                if (i == calc.Count) {
-                    output += $"{i} = {number}";
-                } else {
-                    output += $"{i} * ";
-                }
-            }
-            this.Logger.Info($"Ergebnis ist: {output}");
-        }*/
-
 
         private static List<int> Calc(int number) {
             List<int> list = new List<int>();
