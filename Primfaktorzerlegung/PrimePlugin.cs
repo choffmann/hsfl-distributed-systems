@@ -14,13 +14,15 @@ namespace Primfaktorzerlegung {
         public string PrimeOutput { get; set; }
         public PrimePlugin() : base("Primfaktorzerlegung") { }
 
-        public override void OnServerExecute(string[] input) {
+        public override void OnServerExecute(string[] args) {
+            string input = args[0] ?? throw new ArgumentException("Pfad zur Datei wurde nicht angegeben");
             try {
-                var calc = Calc(Convert.ToInt32(input[0]));
+                int inputNumber = Convert.ToInt32(input);
+                var calc = Calc(inputNumber);
                 string output = "";
                 for (int i = 1; i < calc.Count; i++) {
                     if (i == calc.Count - 1) {
-                        output += $"{calc[i]} = {input[0]}";
+                        output += $"{calc[i]} = {inputNumber}";
                     } else {
                         output += $"{calc[i]} * ";
                     }
@@ -30,7 +32,7 @@ namespace Primfaktorzerlegung {
                 this.Logger.Info($"Ergebnis ist: {output}");
             }
             catch (OverflowException e) {
-                this.Logger.Error($"Fehler beim konvertieren der Nummer {input[0]}");
+                this.Logger.Error($"Fehler beim konvertieren der Nummer {input}");
                 throw;
             }
         }

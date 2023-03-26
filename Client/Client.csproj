@@ -79,7 +79,6 @@
   <ItemGroup>
     <Compile Include="Commands\DefaultSettings.cs" />
     <Compile Include="Commands\PluginCommand.cs" />
-    <Compile Include="Commands\RegisterPluginCommand.cs" />
     <Compile Include="Commands\StatusCommand.cs" />
     <Compile Include="Injections\TypeRegistrar.cs" />
     <Compile Include="Injections\TypeResolver.cs" />

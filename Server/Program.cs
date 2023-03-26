@@ -29,8 +29,8 @@ namespace hsfl.ceho5518.vs.server {
             LoadPlugins();
 
             // Initialization done
-            logger.SuccessEmoji("Initialization of System successful");
-            logger.Info("Waiting for a job...");
+            logger.Success("Systeme wurde erflogreich initialisiert");
+            logger.Info("Warte auf einen Job...");
 
             GlobalState.GetInstance().ServerStatus = ServerStatus.IDLE;
             
@@ -47,7 +47,7 @@ namespace hsfl.ceho5518.vs.server {
             AnsiConsole.Status()
                 .Spinner(Spinner.Known.Dots)
                 .Start(
-                    $"[yellow]Starting Server...[/]", ctx => {
+                    $"[yellow]Starte Server...[/]", ctx => {
                         CreateAppDataFolder();
                         Thread.Sleep(2000);
                     });

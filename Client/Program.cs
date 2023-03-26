@@ -40,7 +40,7 @@ namespace hsfl.ceho5518.vs.Client {
 
                 config.AddBranch<PluginCommand.Settings>("plugin", plugin => {
                     plugin.SetDescription("Work with Plugins");
-                    plugin.AddCommand<PluginStatusCommand>("status");
+                    plugin.AddCommand<PluginRunCommand>("status");
                     plugin.AddCommand<PluginUploadCommand>("load");
                     plugin.AddCommand<PluginListCommand>("run")
                         .WithExample(new []{"prime", "300"})

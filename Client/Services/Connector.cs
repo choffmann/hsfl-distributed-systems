@@ -1,6 +1,7 @@
 ﻿using System;
 using hsfl.ceho5518.vs.Client.Logger;
 using hsfl.ceho5518.vs.LoggerService;
+using Spectre.Console;
 
 namespace hsfl.ceho5518.vs.Client.Services {
 
@@ -20,14 +21,15 @@ namespace hsfl.ceho5518.vs.Client.Services {
         }
         
         public void Setup() {
-            this.logger.Info("Setup Connection to Master");
-            this._discovery.ProbeEndpointAddress = new Uri("net.tcp://localhost:8001/Probe");
-            var endpointAddress = this._discovery.SetupProxy();
-            this._invokeClient.Setup(endpointAddress);
-            this.logger.Info("Connection to Master");
-            this._invokeClient.Connect("123-456-789");
-            
-            this.logger.Success("Connection to Master successful");
+            AnsiConsole.Status().Start("Versuche mit Master im Netzwerk zu verbinden...", ctx => {
+                this.logger.Info("Setzte Verbindung zum Master");
+                this._discovery.ProbeEndpointAddress = new Uri("net.tcp://localhost:8001/Probe");
+                var endpointAddress = this._discovery.SetupProxy();
+                this._invokeClient.Setup(endpointAddress);
+                this.logger.Info("Verbinde zum Master");
+                this._invokeClient.Connect(Guid.NewGuid().ToString());
+            });
+            this.logger.Success("Verbindung zum Master wurde erfolgriech aufgebaut.");
         }
     }
 }

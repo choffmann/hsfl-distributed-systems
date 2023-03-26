@@ -23,20 +23,20 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
         }
 
         public void SetupProxy() {
-            AnsiConsole.Status().Spinner(Spinner.Known.Earth).Start("[yellow]Try to find Master in Network[/]", ctx => {
+            AnsiConsole.Status().Spinner(Spinner.Known.Earth).Start("[yellow]Versuche, Master im Netzwerk zu finden[/]", ctx => {
                 try {
                     var findResponse = this.discoveryClient.Find(new FindCriteria(typeof(IServerDiscoveryService)));
-                    this.logger.Info("Found the [bold]Master[/] in network, system become a Worker");
-                    ctx.Status("[yellow]Start Server as Worker[/]");
+                    this.logger.Info("Der [bold]Master[/] wurde im Netzwerk gefunden. Das System wird meldet sich als Worker");
+                    ctx.Status("[yellow]Starte Server als Worker[/]");
                     SetupWorkerDiscovery(findResponse.Endpoints[0].Address);
                 }
                 catch (TargetInvocationException) {
-                    this.logger.Info("[bold]No Master found in Network.[/] Setting this instance to [bold grey]Master[/]");
-                    ctx.Status("[yellow]Start Server as Master[/]");
+                    this.logger.Info("[bold]Es wurde kein Master im Netzwerk gefunden.[/] Das System wird als [bold grey]Master[/] gestartet");
+                    ctx.Status("[yellow]Starte Server als Master[/]");
                     SetupMasterDiscovery();
                 }
                 catch (Exception ex) {
-                    this.logger.Error("Unexpected Error on creating DiscoveryProxy. [bold red]Shutdown the Application...[/]");
+                    this.logger.Error("Ein unerwarteter Fehler beim Starten vom Server. [bold red]Applikation wird beendet...[/]");
                     this.logger.Exception(ex);
                     Console.ReadLine();
                     Environment.Exit(100);
@@ -57,9 +57,9 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             if (discoveryHost.Status().Equals(CommunicationState.Opened) && clientHost.Status().Equals(CommunicationState.Opened)) {
                 this.logger.Debug($"DiscoveryHost CommunicationState is {discoveryHost.Status()}");
                 this.logger.Debug($"ClientHost CommunicationState is {clientHost.Status()}");
-                this.logger.Success($"Initialized Master successfully");
+                this.logger.Success($"Initialisierung vom Master erfolgreich.");
             } else {
-                this.logger.Error("System can't start the Server. [bold red]Shutdown the Application...[/]");
+                this.logger.Error("Das System kann den Server durch einen internen Fehler nicht startet. [bold red]Applikartion wird beendet...[/]");
                 this.logger.Debug($"DiscoveryHost CommunicationState is {discoveryHost.Status()}");
                 this.logger.Debug($"ClientHost CommunicationState is {clientHost.Status()}");
                 Console.ReadLine();
@@ -72,7 +72,7 @@ namespace hsfl.ceho5518.vs.server.DiscoveryProxy {
             var serverDiscovery = new InvokeServerDiscovery();
             serverDiscovery.Connect(endpointAddress);
             
-            this.logger.Success($"Worker initialization successful");
+            this.logger.Success($"Initialisierung von Worker erfolgreich");
         }
     }
 }

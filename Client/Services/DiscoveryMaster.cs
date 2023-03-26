@@ -24,8 +24,7 @@ namespace hsfl.ceho5518.vs.Client.Services {
                 return findResponse.Endpoints[0].Address;
             }
             catch (TargetInvocationException) {
-                //this.logger.Error("[bold]No Master found in Network.[/]");
-                throw new Exception("Unable to connect to master system");
+                throw new Exception("Es wurde kein Master im Netzwerk gefunden.");
             }
         }
     }

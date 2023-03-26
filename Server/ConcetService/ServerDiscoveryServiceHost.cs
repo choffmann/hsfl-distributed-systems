@@ -26,7 +26,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         }
 
         public void Start() {
-            this.logger.Info("Starting Server Discovery Host...");
+            this.logger.Info("Starte Server Discovery Host...");
             try {
                 // Set Behavior
                 var smb = this.serviceHost.Description.Behaviors.Find<ServiceMetadataBehavior>() ?? new ServiceMetadataBehavior();
@@ -43,15 +43,15 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
                 // Make the service discoverable
                 this.serviceHost.Description.Behaviors.Add(serviceDiscoveryBehavior);
                 this.serviceHost.Open();
-                this.logger.Info($"Discovery Service started at {baseAddress}");
+                this.logger.Info($"Discovery Service wurde unter der Adresse {baseAddress} gestartet.");
             }
             catch (CommunicationException e) {
                 this.logger.Exception(e);
-                this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                this.logger.Error($"Fehler beim laden von ServerDiscoveryHost. {e.Message}");
             }
             catch (TimeoutException e) {
                 this.logger.Exception(e);
-                this.logger.Error($"Failed to load ServerDiscoveryHost. {e.Message}");
+                this.logger.Error($"Fehler beim laden von ServerDiscoveryHost. {e.Message}");
             }
         }
 
@@ -62,7 +62,7 @@ namespace hsfl.ceho5518.vs.server.ConcreatService {
         public void Stop() {
             if (this.serviceHost.State == CommunicationState.Closed)
                 return;
-            this.logger.Info("Aborting the Discovery service...");
+            this.logger.Info("Stoppe Discovery Service...");
             this.serviceHost.Abort();
         }
     }

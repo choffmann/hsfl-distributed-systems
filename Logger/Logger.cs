@@ -43,6 +43,10 @@ namespace hsfl.ceho5518.vs.LoggerService {
                         this.levelValue = 4;
                         this.level = LogLevel.Error;
                         break;
+                    case LogLevel.None:
+                        this.levelValue = 5;
+                        this.level = LogLevel.None;
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(value), value, null);
                 }
@@ -60,20 +64,6 @@ namespace hsfl.ceho5518.vs.LoggerService {
             if (this.levelValue > 1)
                 return;
             AnsiConsole.MarkupLine($"[gray][[INFO]][/] [green]{message}[/]");
-            WriteToLogFile("SUCCESS", message);
-        }
-
-        public void SuccessEmoji(string message) {
-            if (this.levelValue > 2)
-                return;
-            AnsiConsole.MarkupLine($"[gray][[INFO]][/] :party_popper: [green]{message}[/]");
-            WriteToLogFile("SUCCESS", message);
-        }
-
-        public void SuccessEmoji(string emoji, string message) {
-            if (this.levelValue > 2)
-                return;
-            AnsiConsole.MarkupLine($"[gray][[INFO]][/] {emoji} [green]{message}[/]");
             WriteToLogFile("SUCCESS", message);
         }
 

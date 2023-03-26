@@ -35,14 +35,6 @@ namespace PluginContract {
             this.logger.Success($"[turquoise2]{PluginName}[/]: {message}");
         }
 
-        public void SuccessEmoji(string message) {
-            this.logger.SuccessEmoji($"[turquoise2]{PluginName}[/]: {message}");
-        }
-
-        public void SuccessEmoji(string emoji, string message) {
-            this.logger.SuccessEmoji(emoji, $"[turquoise2]{PluginName}[/]: {message}");
-        }
-
         public void Warning(string message) {
             this.logger.Warning($"[orange4]{PluginName}[/]: {message}");
         }

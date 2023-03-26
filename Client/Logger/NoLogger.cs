@@ -13,12 +13,6 @@ namespace hsfl.ceho5518.vs.Client {
         public void Success(string message) {
             WriteToLogFile("SUCCESS", message);
         }
-        public void SuccessEmoji(string message) {
-            WriteToLogFile("SUCCESS", message);
-        }
-        public void SuccessEmoji(string emoji, string message) {
-            WriteToLogFile("SUCCESS", message);
-        }
         public void Warning(string message) {
             WriteToLogFile("WARNING", message);
         }

@@ -45,19 +45,17 @@ namespace hsfl.ceho5518.vs.Client.Commands {
 
         public override int Execute(CommandContext context, Settings settings) {
             this._connector.Setup();
-
-            this.logger.Info("Hello");
             byte[] assembly = File.ReadAllBytes(settings.PluginPath);
             return this._invokeClient.UploadPlugin(assembly);
         }
     }
 
-    public sealed class PluginStatusCommand : Command<PluginStatusCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
+    public sealed class PluginRunCommand : Command<PluginRunCommand.Settings>, ICommandLimiter<PluginCommand.Settings> {
         private readonly IInvokeClientDiscovery _invokeClient;
         private readonly IConnector _connector;
         private ILogger logger;
 
-        public PluginStatusCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
+        public PluginRunCommand(IConnector connector, IInvokeClientDiscovery invokeClient) {
             this._connector = connector ?? throw new ArgumentNullException(nameof(connector));
             this._invokeClient = invokeClient ?? throw new ArgumentNullException(nameof(invokeClient));
             this.logger = ClientLogger.Logger;
@@ -76,15 +74,16 @@ namespace hsfl.ceho5518.vs.Client.Commands {
             var status = this._invokeClient.PluginStatus().Plugins;
             var table = new Table();
             table.AddColumn("Name");
+            table.AddColumn("CommandName");
             table.AddColumn("Active");
             table.AddColumn("Size");
 
             foreach (var plugin in status) {
-                table.AddRow(plugin.Name, plugin.Activated.ToString(), plugin.Size.ToString());
+                table.AddRow(plugin.Name, plugin.Activated.ToString(), plugin.CommandName, plugin.Size.ToString());
             }
 
             AnsiConsole.Write(table);
-            AnsiConsole.MarkupLine($"Total plugin loaded: {status.Count}");
+            AnsiConsole.MarkupLine($"Insgesamt sind {status.Count} Plugins verfügbar");
         }
     }
 

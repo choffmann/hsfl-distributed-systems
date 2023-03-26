@@ -28,8 +28,6 @@ namespace DemoPlugin {
             this.Logger.Debug($"Eine Debug Ausgabe vom Plugin :bug:");
             this.Logger.Info($"Eine Info Ausgabe vom Plugin :waving_hand:");
             this.Logger.Success($"Eine Erfolgreiche Ausgabe vom Plugin :check_mark_button:");
-            this.Logger.SuccessEmoji($"Eine Erfolgreiche Ausgabe vom Plugin mit Emoji");
-            this.Logger.SuccessEmoji(":otter:", "Eine Erfolgreiche Ausgabe vom Plugin mit eigenen Emoji");
             this.Logger.Warning($"Eine Warnung Ausgabe vom Plugin :warning:");
             this.Logger.Error($"Eine Fehler Ausgabe vom Plugin :cross_mark:");
             this.Logger.WriteToLogFile("DEBUG", "Eine Ausgabe nur in die Log-File vom Plugin");

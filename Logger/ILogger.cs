@@ -9,8 +9,6 @@ namespace hsfl.ceho5518.vs.LoggerService {
         LogLevel LogLevel { get; set; }
         void Info(string message);
         void Success(string message);
-        void SuccessEmoji(string message);
-        void SuccessEmoji(string emoji, string message);
         void Warning(string message);
         void Error(string message);
         void Exception(Exception exception);
